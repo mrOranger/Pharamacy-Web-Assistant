@@ -1,5 +1,6 @@
 package it.pharmacywebassistant.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -38,6 +39,7 @@ public final class Address implements Serializable {
     private String nation;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "address")
+    @JsonBackReference
     private Collection<Company> companies;
 
     public Address(String streetName, Long streetCode, String city, String nation) {

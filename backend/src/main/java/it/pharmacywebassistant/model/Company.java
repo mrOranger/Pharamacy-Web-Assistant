@@ -1,11 +1,15 @@
 package it.pharmacywebassistant.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 
 @Entity(name = "Company") @Table(name = "Companies")
 @NoArgsConstructor
@@ -23,6 +27,10 @@ public final class Company implements Serializable {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(referencedColumnName = "id", name = "Address")
     private Address address;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "company")
+    @JsonBackReference
+    private Collection<Product> products = new ArrayList<>();
 
     public Company(String name, Address address) {
         this.name = name;
@@ -45,6 +53,7 @@ public final class Company implements Serializable {
         this.name = name;
     }
 
+    @JsonManagedReference
     public Address getAddress() {
         return address;
     }

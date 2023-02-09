@@ -1,5 +1,6 @@
 package it.pharmacywebassistant.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -75,6 +76,7 @@ public abstract class Product implements Serializable {
         this.cost = cost;
     }
 
+    @JsonManagedReference
     public Company getCompany() {
         return company;
     }
