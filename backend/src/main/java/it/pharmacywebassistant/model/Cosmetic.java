@@ -2,39 +2,32 @@ package it.pharmacywebassistant.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.Getter;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-import java.sql.Date;
+import java.io.Serializable;
 
-@Entity(name = "Cosmetics") @Table(name = "Cosmetics")
-@Getter @Setter @NoArgsConstructor
-public final class Cosmetic {
+@Entity(name = "Cosmetic") @Table(name = "Cosmetics")
+@NoArgsConstructor
+public final class Cosmetic extends Product implements Serializable {
 
-    public Cosmetic(String name, String description, Float cost, String type) {
-        this.name = name;
-        this.description = description;
-        this.cost = cost;
+    @Column(name = "Type")
+    @NotNull(message = "{Cosmetic.Type.NotNull}")
+    @Size(max = 100, message = "{Cosmetic.Type.Size}")
+    private String type;
+
+    public Cosmetic(String name, String description, Double cost, String type) {
+        super(name, description, cost);
         this.type = type;
     }
 
-    @Id
-    @Column(name = "Name")
-    private String name;
-    @Column(name = "Description")
-    private String description;
-    @Column(name = "Cost")
-    private Float cost;
+    public String getType() {
+        return type;
+    }
 
-    @Column(name = "Prescription")
-    private Boolean needPrescription;
-
-    @Column(name = "ExpiresIn")
-    private Date expiresIn;
-
-    @Column(name = "Type")
-    private String type;
+    public void setType(String type) {
+        this.type = type;
+    }
 }
