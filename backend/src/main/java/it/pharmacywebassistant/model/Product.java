@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Range;
 
 import java.io.Serializable;
 
@@ -29,11 +30,11 @@ public abstract class Product implements Serializable {
 
     @Column(name = "Cost")
     @NotNull(message = "{Product.Cost.NotNull}")
-    @Size(min = 1, message = "{Product.Cost.Size}")
+    @Range(min = 1, message = "{Product.Cost.Size}")
     private Double cost;
 
     @NotNull(message = "{Product.Company.NotNull}")
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Company company;
 
     public Product(String name, String description, Double cost) {

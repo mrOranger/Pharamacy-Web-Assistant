@@ -3,10 +3,12 @@ package it.pharmacywebassistant.service;
 import it.pharmacywebassistant.model.Product;
 import it.pharmacywebassistant.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public final class ProductService {
 
     @Autowired

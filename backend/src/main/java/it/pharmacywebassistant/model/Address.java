@@ -4,8 +4,11 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Range;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 
 @Entity(name = "Address") @Table(name = "Addresses")
 @NoArgsConstructor
@@ -21,7 +24,7 @@ public final class Address implements Serializable {
 
     @Column(name = "code")
     @NotNull(message = "{Address.StreetCode.NotNull}")
-    @Size(min = 1, message = "{Address.StreetCode.Size}")
+    @Range(min = 1, message = "{Address.StreetCode.Size}")
     private Long streetCode;
 
     @Column(name = "city")
@@ -34,11 +37,15 @@ public final class Address implements Serializable {
     @Size(max = 100, message = "{Address.Nation.Size}")
     private String nation;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "address")
+    private Collection<Company> companies;
+
     public Address(String streetName, Long streetCode, String city, String nation) {
         this.streetName = streetName;
         this.streetCode = streetCode;
         this.city = city;
         this.nation = nation;
+        this.companies = new ArrayList<>();
     }
 
     public Long getId() {

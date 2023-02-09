@@ -20,7 +20,8 @@ public final class Company implements Serializable {
     private String name;
 
     @NotNull(message = "Company.Address.NotNull")
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(referencedColumnName = "id", name = "Address")
     private Address address;
 
     public Company(String name, Address address) {
