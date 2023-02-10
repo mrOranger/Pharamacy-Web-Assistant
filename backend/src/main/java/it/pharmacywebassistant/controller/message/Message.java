@@ -8,10 +8,10 @@ import java.time.LocalDate;
 public final class Message {
 
     private LocalDate date;
-    private Byte code;
+    private Integer code;
     private String message;
 
-    public Message(LocalDate date, Byte code, String message) {
+    public Message(LocalDate date, Integer code, String message) {
         this.date = date;
         this.code = code;
         this.message = message;
@@ -25,11 +25,11 @@ public final class Message {
         this.date = date;
     }
 
-    public Byte getCode() {
+    public Integer getCode() {
         return code;
     }
 
-    public void setCode(Byte code) {
+    public void setCode(Integer code) {
         this.code = code;
     }
 

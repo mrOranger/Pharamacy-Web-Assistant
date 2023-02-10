@@ -1,36 +1,17 @@
 package it.pharmacywebassistant.service;
 
 import it.pharmacywebassistant.model.Product;
-import it.pharmacywebassistant.repository.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-@Service
-public final class ProductService {
+public interface ProductService {
 
-    @Autowired
-    private ProductRepository repository;
+    public abstract List<Product> findAll();
+    public abstract Optional<Product> findById(Long id);
 
-    public List<Product> findAll() {
-        return repository.findAll();
-    }
+    public abstract Product save(Product product);
+    public abstract void deleteById(Long id);
+    public abstract void deleteAll();
 
-    public Optional<Product> findById(Long id) {
-        return repository.findById(id);
-    }
-
-    public Product save(Product product) {
-        return repository.save(product);
-    }
-
-    public void deleteById(Long id) {
-        repository.deleteById(id);
-    }
-
-    public void deleteAll() {
-        repository.deleteAll();
-    }
 }

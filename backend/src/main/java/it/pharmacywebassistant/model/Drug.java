@@ -12,6 +12,8 @@ import java.io.Serializable;
 @NoArgsConstructor
 public final class Drug extends Product implements Serializable {
 
+    public static final long serialVersionUID = -91821391239L;
+
     @Column(name = "Prescription")
     @NotNull(message = "{Drug.HasPrescription.NotNull}")
     private Boolean hasPrescription;
@@ -27,5 +29,10 @@ public final class Drug extends Product implements Serializable {
 
     public void setHasPrescription(Boolean hasPrescription) {
         this.hasPrescription = hasPrescription;
+    }
+
+    @Override
+    public String toString() {
+        return this.getId() + " " + this.getName() + " " + this.getDescription() +  " " + this.getCost() + " " + this.getHasPrescription();
     }
 }

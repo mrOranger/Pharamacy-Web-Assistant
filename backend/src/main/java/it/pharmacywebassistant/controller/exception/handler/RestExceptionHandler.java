@@ -22,7 +22,7 @@ public final class RestExceptionHandler extends ResponseEntityExceptionHandler {
         final Message response = new Message();
         response.setDate(LocalDate.now());
         response.setMessage(ex.getMessage());
-        response.setCode((byte)HttpStatus.NOT_FOUND.value());
+        response.setCode(HttpStatus.NOT_FOUND.value());
         return new ResponseEntity<Message>(response, new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
 
@@ -31,7 +31,7 @@ public final class RestExceptionHandler extends ResponseEntityExceptionHandler {
         final Message response = new Message();
         response.setDate(LocalDate.now());
         response.setMessage(ex.getMessage());
-        response.setCode((byte)HttpStatus.BAD_REQUEST.value());
+        response.setCode(HttpStatus.BAD_REQUEST.value());
         return new ResponseEntity<Message>(response, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
@@ -40,7 +40,7 @@ public final class RestExceptionHandler extends ResponseEntityExceptionHandler {
         final Message response = new Message();
         response.setDate(LocalDate.now());
         response.setMessage(ex.getMessage());
-        response.setCode((byte)HttpStatus.CONFLICT.value());
+        response.setCode(HttpStatus.CONFLICT.value());
         return new ResponseEntity<Message>(response, new HttpHeaders(), HttpStatus.CONFLICT);
     }
 

@@ -1,10 +1,13 @@
 package it.pharmacywebassistant.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.validator.constraints.Range;
 
 import java.io.Serializable;
@@ -36,6 +39,8 @@ public abstract class Product implements Serializable {
 
     @NotNull(message = "{Product.Company.NotNull}")
     @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "Company", referencedColumnName = "id")
+    @JsonBackReference
     private Company company;
 
     public Product(String name, String description, Double cost) {
@@ -76,7 +81,6 @@ public abstract class Product implements Serializable {
         this.cost = cost;
     }
 
-    @JsonManagedReference
     public Company getCompany() {
         return company;
     }

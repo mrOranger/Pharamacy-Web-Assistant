@@ -10,10 +10,13 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Entity(name = "Company") @Table(name = "Companies")
 @NoArgsConstructor
 public final class Company implements Serializable {
+
+    public static final long serialVersionUID = -1701192301923L;
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -25,12 +28,13 @@ public final class Company implements Serializable {
 
     @NotNull(message = "Company.Address.NotNull")
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(referencedColumnName = "id", name = "Address")
+    @JoinColumn(name = "Address", nullable = false)
+    @JsonBackReference
     private Address address;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "company")
-    @JsonBackReference
-    private Collection<Product> products = new ArrayList<>();
+    @OneToMany(mappedBy = "company")
+    @JsonManagedReference
+    private List<Product> products = new ArrayList<>();
 
     public Company(String name, Address address) {
         this.name = name;
@@ -53,7 +57,6 @@ public final class Company implements Serializable {
         this.name = name;
     }
 
-    @JsonManagedReference
     public Address getAddress() {
         return address;
     }

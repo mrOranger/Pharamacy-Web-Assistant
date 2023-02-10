@@ -13,6 +13,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 public final class Cosmetic extends Product implements Serializable {
 
+    public static final long serialVersionUID = -938481928340L;
     @Column(name = "Type")
     @NotNull(message = "{Cosmetic.Type.NotNull}")
     @Size(max = 100, message = "{Cosmetic.Type.Size}")

@@ -1,6 +1,7 @@
 package it.pharmacywebassistant.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -10,10 +11,13 @@ import org.hibernate.validator.constraints.Range;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Entity(name = "Address") @Table(name = "Addresses")
 @NoArgsConstructor
 public final class Address implements Serializable {
+
+    public static final long serialVersionUID = -17282381012903L;
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -38,16 +42,15 @@ public final class Address implements Serializable {
     @Size(max = 100, message = "{Address.Nation.Size}")
     private String nation;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "address")
-    @JsonBackReference
-    private Collection<Company> companies;
+    @OneToMany(mappedBy = "address")
+    @JsonManagedReference
+    private List<Company> companies = new ArrayList<>();
 
     public Address(String streetName, Long streetCode, String city, String nation) {
         this.streetName = streetName;
         this.streetCode = streetCode;
         this.city = city;
         this.nation = nation;
-        this.companies = new ArrayList<>();
     }
 
     public Long getId() {
