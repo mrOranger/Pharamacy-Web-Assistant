@@ -1,6 +1,5 @@
 package it.pharmacywebassistant.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -10,7 +9,6 @@ import org.hibernate.validator.constraints.Range;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Entity(name = "Address") @Table(name = "Addresses")
@@ -44,7 +42,7 @@ public final class Address implements Serializable {
 
     @OneToMany(mappedBy = "address")
     @JsonManagedReference
-    private List<Company> companies = new ArrayList<>();
+    private final List<Company> companies = new ArrayList<>();
 
     public Address(String streetName, Long streetCode, String city, String nation) {
         this.streetName = streetName;

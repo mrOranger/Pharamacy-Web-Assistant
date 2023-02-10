@@ -1,15 +1,13 @@
 package it.pharmacywebassistant.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import org.hibernate.validator.constraints.Range;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 @Entity(name = "Product") @Table(name = "Products")
@@ -17,6 +15,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 public abstract class Product implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = -3040216250095742667L;
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO)

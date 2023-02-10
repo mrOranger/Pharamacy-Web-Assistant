@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Entity(name = "Company") @Table(name = "Companies")
@@ -34,7 +33,7 @@ public final class Company implements Serializable {
 
     @OneToMany(mappedBy = "company")
     @JsonManagedReference
-    private List<Product> products = new ArrayList<>();
+    private final List<Product> products = new ArrayList<>();
 
     public Company(String name, Address address) {
         this.name = name;

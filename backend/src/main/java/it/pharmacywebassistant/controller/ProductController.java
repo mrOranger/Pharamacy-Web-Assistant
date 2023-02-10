@@ -8,7 +8,6 @@ import it.pharmacywebassistant.model.Cosmetic;
 import it.pharmacywebassistant.model.Drug;
 import it.pharmacywebassistant.model.Product;
 import it.pharmacywebassistant.service.ProductService;
-import it.pharmacywebassistant.service.implementation.ProductServiceImpl;
 import jakarta.validation.Valid;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.print.attribute.standard.Media;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
