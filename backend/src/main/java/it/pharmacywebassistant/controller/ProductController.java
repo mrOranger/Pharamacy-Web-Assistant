@@ -7,7 +7,7 @@ import it.pharmacywebassistant.controller.message.Message;
 import it.pharmacywebassistant.model.Cosmetic;
 import it.pharmacywebassistant.model.Drug;
 import it.pharmacywebassistant.model.Product;
-import it.pharmacywebassistant.model.dto.ProductDto;
+import it.pharmacywebassistant.service.ProductService;
 import it.pharmacywebassistant.service.implementation.ProductServiceImpl;
 import jakarta.validation.Valid;
 import lombok.SneakyThrows;
@@ -29,7 +29,7 @@ import java.util.Optional;
 public final class ProductController {
 
     @Autowired
-    private ProductServiceImpl service;
+    private ProductService service;
 
     @Autowired
     private ResourceBundleMessageSource errorMessage;
@@ -67,6 +67,6 @@ public final class ProductController {
             throw new ConflictException();
         }
         service.save(product);
-        return ResponseEntity.ok(new Message(LocalDate.now(), HttpStatus.CREATED.value(), "Prodotto inserito con successo!"));
+        return ResponseEntity.ok(new Message(LocalDate.now(), HttpStatus.OK.value(), "Prodotto inserito con successo!"));
     }
 }
