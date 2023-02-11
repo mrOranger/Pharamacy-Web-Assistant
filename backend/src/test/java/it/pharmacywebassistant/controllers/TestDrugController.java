@@ -122,4 +122,26 @@ public final class TestDrugController {
                 .andDo(print());
     }
 
+
+    @Test @Order(6) @SneakyThrows
+    public void testRemoveProductWithId1ReturnsMessageWithOkCode() {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/products/1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(HttpStatus.OK.value()))
+                .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
+                .andExpect(jsonPath("$.message").value("Prodotto eliminato con successo!"))
+                .andDo(print());
+    }
+
+    @Test @Order(7) @SneakyThrows
+    public void testGetAllProductsReturnsAgainMessageWithNotFoundCode() {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/products/")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.value()))
+                .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
+                .andExpect(jsonPath("$.message").value("Nessun elemento presente nel database!"))
+                .andDo(print());
+    }
 }

@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @RestController @RequestMapping(path = "api/products", produces = MediaType.APPLICATION_JSON_VALUE)
 public final class ProductController {
@@ -33,7 +34,7 @@ public final class ProductController {
     private ResourceBundleMessageSource errorMessage;
 
     @GetMapping(path = "/") @SneakyThrows
-    public final ResponseEntity<List<Product>> getProducts() {
+    public ResponseEntity<List<Product>> getProducts() {
         final List<Product> products = service.findAll();
         if(products.isEmpty()) {
             throw new NotFoundException();
@@ -42,7 +43,7 @@ public final class ProductController {
     }
 
     @PostMapping(path = "/drugs/", consumes = MediaType.APPLICATION_JSON_VALUE) @SneakyThrows
-    public final ResponseEntity<Message> postDrug(@Valid @RequestBody Drug product, BindingResult bindingResult) {
+    public ResponseEntity<Message> postDrug(@Valid @RequestBody Drug product, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             System.out.println(errorMessage.getMessage(bindingResult.getFieldError(), LocaleContextHolder.getLocale()));
             throw new BadRequestException(errorMessage.getMessage(bindingResult.getFieldError(), LocaleContextHolder.getLocale()));
@@ -56,7 +57,7 @@ public final class ProductController {
     }
 
     @PostMapping(path = "/cosmetics/", consumes = MediaType.APPLICATION_JSON_VALUE) @SneakyThrows
-    public final ResponseEntity<Message> postCosmetic(@Valid @RequestBody Cosmetic product, BindingResult bindingResult) {
+    public ResponseEntity<Message> postCosmetic(@Valid @RequestBody Cosmetic product, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             throw new BadRequestException(errorMessage.getMessage(bindingResult.getFieldError(), LocaleContextHolder.getLocale()));
         }
@@ -66,5 +67,19 @@ public final class ProductController {
         }
         service.save(product);
         return ResponseEntity.ok(new Message(LocalDate.now(), HttpStatus.OK.value(), "Prodotto inserito con successo!"));
+    }
+
+    @DeleteMapping(path = "/{id}") @SneakyThrows
+    public ResponseEntity<Message> deleteProduct(@PathVariable Long id) {
+        final List<Product> products = service.findAll();
+        if(products.isEmpty()) {
+            throw new ConflictException("Impossibile eliminare un elemento da una collezione vuota!");
+        }
+        final Stream<Product> foundProduct = products.stream().filter((product -> product.getId().equals(id)));
+        if(foundProduct.findAny().isEmpty()) {
+            throw new ConflictException("Impossibile eliminare un elemento non presente nella collezione!");
+        }
+        service.deleteById(id);
+        return ResponseEntity.ok(new Message(LocalDate.now(), HttpStatus.OK.value(), "Prodotto eliminato con successo!"));
     }
 }

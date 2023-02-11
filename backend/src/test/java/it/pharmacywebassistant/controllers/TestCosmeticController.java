@@ -62,11 +62,10 @@ public final class TestCosmeticController {
 
     }
 
-    @Test
-    @Order(1) @SneakyThrows
+    @Test @Order(1) @SneakyThrows
     public void testGetAllProductsReturnsMessageWithNotFoundCode() {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/products/")
-                        .accept(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.value()))
                 .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
@@ -117,10 +116,32 @@ public final class TestCosmeticController {
     @Test @Order(5) @SneakyThrows
     public void testGetAllProductsReturnsMessageWithOkayCodeAndCollectionOfSizeOne() {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/products/")
-                        .accept(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*", isA(List.class)))
                 .andExpect(jsonPath("$.*", hasSize(1)))
+                .andDo(print());
+    }
+
+    @Test @Order(6) @SneakyThrows
+    public void testRemoveProductWithId1ReturnsMessageWithOkCode() {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/products/1")
+                    .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(HttpStatus.OK.value()))
+                .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
+                .andExpect(jsonPath("$.message").value("Prodotto eliminato con successo!"))
+                .andDo(print());
+    }
+
+    @Test @Order(7) @SneakyThrows
+    public void testGetAllProductsReturnsAgainMessageWithNotFoundCode() {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/products/")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.value()))
+                .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
+                .andExpect(jsonPath("$.message").value("Nessun elemento presente nel database!"))
                 .andDo(print());
     }
 }
