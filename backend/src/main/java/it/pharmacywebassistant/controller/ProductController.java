@@ -5,8 +5,8 @@ import it.pharmacywebassistant.controller.exception.ConflictException;
 import it.pharmacywebassistant.controller.exception.NotFoundException;
 import it.pharmacywebassistant.controller.message.Message;
 import it.pharmacywebassistant.model.Cosmetic;
-import it.pharmacywebassistant.model.Drug;
 import it.pharmacywebassistant.model.Product;
+import it.pharmacywebassistant.model.dto.ProductDTO;
 import it.pharmacywebassistant.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.SneakyThrows;
@@ -34,8 +34,8 @@ public final class ProductController {
     private ResourceBundleMessageSource errorMessage;
 
     @GetMapping(path = "/") @SneakyThrows
-    public ResponseEntity<List<Product>> getProducts() {
-        final List<Product> products = service.findAll();
+    public ResponseEntity<List<ProductDTO>> getProducts() {
+        final List<ProductDTO> products = service.findAll();
         if(products.isEmpty()) {
             throw new NotFoundException();
         }
@@ -43,12 +43,12 @@ public final class ProductController {
     }
 
     @PostMapping(path = "/drugs/", consumes = MediaType.APPLICATION_JSON_VALUE) @SneakyThrows
-    public ResponseEntity<Message> postDrug(@Valid @RequestBody Drug product, BindingResult bindingResult) {
+    public ResponseEntity<Message> postDrug(@Valid @RequestBody Product product, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             System.out.println(errorMessage.getMessage(bindingResult.getFieldError(), LocaleContextHolder.getLocale()));
             throw new BadRequestException(errorMessage.getMessage(bindingResult.getFieldError(), LocaleContextHolder.getLocale()));
         }
-        final Optional<Product> productInDatabase = service.findById(product.getId());
+        final Optional<ProductDTO> productInDatabase = service.findById(product.getId());
         if(productInDatabase.isPresent()) {
             throw new ConflictException();
         }
@@ -61,7 +61,7 @@ public final class ProductController {
         if(bindingResult.hasErrors()) {
             throw new BadRequestException(errorMessage.getMessage(bindingResult.getFieldError(), LocaleContextHolder.getLocale()));
         }
-        final Optional<Product> productInDatabase = service.findById(product.getId());
+        final Optional<ProductDTO> productInDatabase = service.findById(product.getId());
         if(productInDatabase.isPresent()) {
             throw new ConflictException();
         }
@@ -71,11 +71,11 @@ public final class ProductController {
 
     @DeleteMapping(path = "/{id}") @SneakyThrows
     public ResponseEntity<Message> deleteProduct(@PathVariable Long id) {
-        final List<Product> products = service.findAll();
+        final List<ProductDTO> products = service.findAll();
         if(products.isEmpty()) {
             throw new ConflictException("Impossibile eliminare un elemento da una collezione vuota!");
         }
-        final Stream<Product> foundProduct = products.stream().filter((product -> product.getId().equals(id)));
+        final Stream<ProductDTO> foundProduct = products.stream().filter((product -> product.getId().equals(id)));
         if(foundProduct.findAny().isEmpty()) {
             throw new ConflictException("Impossibile eliminare un elemento non presente nella collezione!");
         }
