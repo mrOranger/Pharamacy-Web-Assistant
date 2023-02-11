@@ -4,10 +4,9 @@ import it.pharmacywebassistant.controller.exception.BadRequestException;
 import it.pharmacywebassistant.controller.exception.ConflictException;
 import it.pharmacywebassistant.controller.exception.NotFoundException;
 import it.pharmacywebassistant.controller.message.Message;
-import it.pharmacywebassistant.model.Cosmetic;
-import it.pharmacywebassistant.model.Product;
-import it.pharmacywebassistant.model.dto.ProductDTO;
-import it.pharmacywebassistant.service.ProductService;
+import it.pharmacywebassistant.model.Drug;
+import it.pharmacywebassistant.model.dto.DrugDTO;
+import it.pharmacywebassistant.service.DrugService;
 import jakarta.validation.Valid;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,31 +23,41 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-@RestController @RequestMapping(path = "api/products", produces = MediaType.APPLICATION_JSON_VALUE)
-public final class ProductController {
+@RestController
+@RequestMapping(path = "v1/api/products/drugs", produces = MediaType.APPLICATION_JSON_VALUE)
+public class DrugController {
 
     @Autowired
-    private ProductService service;
+    private DrugService service;
 
     @Autowired
     private ResourceBundleMessageSource errorMessage;
 
     @GetMapping(path = "/") @SneakyThrows
-    public ResponseEntity<List<ProductDTO>> getProducts() {
-        final List<ProductDTO> products = service.findAll();
+    public ResponseEntity<List<DrugDTO>> getAllDrugs() {
+        final List<DrugDTO> products = service.findAll();
         if(products.isEmpty()) {
             throw new NotFoundException();
         }
         return ResponseEntity.ok(products);
     }
 
-    @PostMapping(path = "/drugs/", consumes = MediaType.APPLICATION_JSON_VALUE) @SneakyThrows
-    public ResponseEntity<Message> postDrug(@Valid @RequestBody Product product, BindingResult bindingResult) {
+    @GetMapping(path = "/{id}") @SneakyThrows
+    public ResponseEntity<DrugDTO> getDrugById(@PathVariable Long id) {
+        final Optional<DrugDTO> product = service.findById(id);
+        if(product.isEmpty()) {
+            throw new NotFoundException();
+        }
+        return ResponseEntity.ok(product.get());
+    }
+
+    @PostMapping(path = "/", consumes = MediaType.APPLICATION_JSON_VALUE) @SneakyThrows
+    public ResponseEntity<Message> postDrug(@Valid @RequestBody Drug product, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             System.out.println(errorMessage.getMessage(bindingResult.getFieldError(), LocaleContextHolder.getLocale()));
             throw new BadRequestException(errorMessage.getMessage(bindingResult.getFieldError(), LocaleContextHolder.getLocale()));
         }
-        final Optional<ProductDTO> productInDatabase = service.findById(product.getId());
+        final Optional<DrugDTO> productInDatabase = service.findById(product.getId());
         if(productInDatabase.isPresent()) {
             throw new ConflictException();
         }
@@ -56,26 +65,38 @@ public final class ProductController {
         return ResponseEntity.ok(new Message(LocalDate.now(), HttpStatus.OK.value(), "Prodotto inserito con successo!"));
     }
 
-    @PostMapping(path = "/cosmetics/", consumes = MediaType.APPLICATION_JSON_VALUE) @SneakyThrows
-    public ResponseEntity<Message> postCosmetic(@Valid @RequestBody Cosmetic product, BindingResult bindingResult) {
+    @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE) @SneakyThrows
+    public ResponseEntity<Message> putDrug(@PathVariable Long id, @Valid @RequestBody Drug product, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
+            System.out.println(errorMessage.getMessage(bindingResult.getFieldError(), LocaleContextHolder.getLocale()));
             throw new BadRequestException(errorMessage.getMessage(bindingResult.getFieldError(), LocaleContextHolder.getLocale()));
         }
-        final Optional<ProductDTO> productInDatabase = service.findById(product.getId());
-        if(productInDatabase.isPresent()) {
-            throw new ConflictException();
+        final Optional<DrugDTO> productInDatabase = service.findById(id);
+        if(productInDatabase.isEmpty()) {
+            throw new NotFoundException("Elemento " + id + " non presente nel database!");
         }
+        product.setId(id);
         service.save(product);
-        return ResponseEntity.ok(new Message(LocalDate.now(), HttpStatus.OK.value(), "Prodotto inserito con successo!"));
+        return ResponseEntity.ok(new Message(LocalDate.now(), HttpStatus.OK.value(), "Prodotto modificato con successo!"));
+    }
+
+    @DeleteMapping(path = "/") @SneakyThrows
+    public ResponseEntity<Message> deleteAllProducts() {
+        final List<DrugDTO> products = service.findAll();
+        if(products.isEmpty()) {
+            throw new ConflictException("Impossibile eliminare una collezione vuota!");
+        }
+        service.deleteAll();
+        return ResponseEntity.ok(new Message(LocalDate.now(), HttpStatus.OK.value(), "Prodotti eliminati con successo!"));
     }
 
     @DeleteMapping(path = "/{id}") @SneakyThrows
     public ResponseEntity<Message> deleteProduct(@PathVariable Long id) {
-        final List<ProductDTO> products = service.findAll();
+        final List<DrugDTO> products = service.findAll();
         if(products.isEmpty()) {
             throw new ConflictException("Impossibile eliminare un elemento da una collezione vuota!");
         }
-        final Stream<ProductDTO> foundProduct = products.stream().filter((product -> product.getId().equals(id)));
+        final Stream<DrugDTO> foundProduct = products.stream().filter((product -> product.getId().equals(id)));
         if(foundProduct.findAny().isEmpty()) {
             throw new ConflictException("Impossibile eliminare un elemento non presente nella collezione!");
         }

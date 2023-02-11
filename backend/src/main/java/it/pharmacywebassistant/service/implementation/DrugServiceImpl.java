@@ -1,9 +1,9 @@
 package it.pharmacywebassistant.service.implementation;
 
-import it.pharmacywebassistant.model.Product;
-import it.pharmacywebassistant.model.dto.ProductDTO;
-import it.pharmacywebassistant.repository.ProductRepository;
-import it.pharmacywebassistant.service.ProductService;
+import it.pharmacywebassistant.model.Drug;
+import it.pharmacywebassistant.model.dto.DrugDTO;
+import it.pharmacywebassistant.repository.DrugRepository;
+import it.pharmacywebassistant.service.DrugService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,27 +13,27 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Service @Transactional(readOnly = true)
-public class ProductServiceImpl implements ProductService {
+@Transactional(readOnly = true) @Service
+public class DrugServiceImpl implements DrugService {
 
     @Autowired
-    private ProductRepository repository;
+    private DrugRepository repository;
 
     @Autowired
     private ModelMapper modelMapper;
 
     @Override
-    public List<ProductDTO> findAll() {
+    public List<DrugDTO> findAll() {
         return convertToDto(repository.findAll());
     }
 
     @Override
-    public Optional<ProductDTO> findById(Long id) {
+    public Optional<DrugDTO> findById(Long id) {
         return convertToDto(repository.findById(id));
     }
 
     @Override @Transactional
-    public ProductDTO save(Product product) {
+    public DrugDTO save(Drug product) {
         return convertToDto(repository.save(product));
     }
 
@@ -47,28 +47,27 @@ public class ProductServiceImpl implements ProductService {
         repository.deleteAll();
     }
 
-    public ProductDTO convertToDto(Product product) {
-        ProductDTO productDTO = null;
+    public DrugDTO convertToDto(Drug product) {
+        DrugDTO productDTO = null;
 
         if(product != null) {
-            productDTO = this.modelMapper.map(product, ProductDTO.class);
+            productDTO = this.modelMapper.map(product, DrugDTO.class);
         }
 
         return productDTO;
     }
-    public Optional<ProductDTO> convertToDto(Optional<Product> product) {
+    public Optional<DrugDTO> convertToDto(Optional<Drug> product) {
 
         if(product.isPresent()) {
-            return Optional.of(this.modelMapper.map(product, ProductDTO.class));
+            return Optional.of(this.modelMapper.map(product, DrugDTO.class));
         }
 
         return Optional.empty();
     }
 
-
-    public List<ProductDTO> convertToDto(List<Product> products) {
+    public List<DrugDTO> convertToDto(List<Drug> products) {
         return products.stream()
-                .map((source) -> this.modelMapper.map(source, ProductDTO.class))
+                .map((source) -> this.modelMapper.map(source, DrugDTO.class))
                 .collect(Collectors.toList());
     }
 }
