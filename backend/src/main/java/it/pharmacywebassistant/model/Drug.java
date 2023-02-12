@@ -2,11 +2,14 @@ package it.pharmacywebassistant.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "Durg") @Table(name = "Drugs")
 @NoArgsConstructor
@@ -23,6 +26,9 @@ public final class Drug extends Product implements Serializable {
         this.hasPrescription = hasPrescription;
     }
 
+    @ManyToMany(mappedBy = "drugs")
+    private List<Prescription> prescriptionList = new ArrayList<>();
+
     public Boolean getHasPrescription() {
         return hasPrescription;
     }
@@ -31,8 +37,4 @@ public final class Drug extends Product implements Serializable {
         this.hasPrescription = hasPrescription;
     }
 
-    @Override
-    public String toString() {
-        return this.getId() + " " + this.getName() + " " + this.getDescription() +  " " + this.getCost() + " " + this.getHasPrescription();
-    }
 }
