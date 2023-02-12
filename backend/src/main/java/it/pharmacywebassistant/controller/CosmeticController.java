@@ -1,6 +1,7 @@
 package it.pharmacywebassistant.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -13,7 +14,6 @@ import it.pharmacywebassistant.controller.exception.NotFoundException;
 import it.pharmacywebassistant.controller.message.Message;
 import it.pharmacywebassistant.model.Cosmetic;
 import it.pharmacywebassistant.model.dto.CosmeticDTO;
-import it.pharmacywebassistant.model.dto.DrugDTO;
 import it.pharmacywebassistant.service.CosmeticService;
 import jakarta.validation.Valid;
 import lombok.SneakyThrows;
@@ -33,7 +33,7 @@ import java.util.stream.Stream;
 
 @RestController
 @RequestMapping(path = "v1/api/products/cosmetics", produces = MediaType.APPLICATION_JSON_VALUE)
-@Tag(name = "CosmeticController", description = "Controller per le operazioni riguardo un Cosmetico")
+@Tag(name = "Cosmetic Controller", description = "Controller per le operazioni riguardo un Cosmetico")
 public class CosmeticController {
 
     @Autowired
@@ -42,7 +42,7 @@ public class CosmeticController {
     @Autowired
     private ResourceBundleMessageSource errorMessage;
 
-    @Operation(summary = "GET all Cosmetics", description = "Restituisce tutti i Cosmetici presenti nel Database", tags = "Get")
+    @Operation(summary = "GET all Cosmetics", description = "Restituisce tutti i Cosmetici presenti nel Database")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Sono stati trovati dei Cosmetici nel Database", content = {
                     @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = CosmeticDTO.class)))
@@ -60,7 +60,7 @@ public class CosmeticController {
         return ResponseEntity.ok(products);
     }
 
-    @Operation(summary = "GET Cosmetic by Id", description = "Restituisce il cosmetico corrispondente all'Id passato in input", tags = "Get")
+    @Operation(summary = "GET Cosmetic by Id", description = "Restituisce il cosmetico corrispondente all'Id passato in input")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "E'stato trovato un Cosmetico all'interno del Database", content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = CosmeticDTO.class))
@@ -70,7 +70,7 @@ public class CosmeticController {
             })
     })
     @GetMapping(path = "/{id}") @SneakyThrows
-    public ResponseEntity<CosmeticDTO> getCosmeticById(@PathVariable Long id) {
+    public ResponseEntity<CosmeticDTO> getCosmeticById(@Parameter(description = "Id del Cosmetico da cercare") @PathVariable Long id) {
         final Optional<CosmeticDTO> product = service.findById(id);
         if(product.isEmpty()) {
             throw new NotFoundException();
@@ -78,7 +78,7 @@ public class CosmeticController {
         return ResponseEntity.ok(product.get());
     }
 
-    @Operation(summary = "POST new Cosmetic", description = "Inserisce un nuovo Cosmetico nel Database", tags = "Post")
+    @Operation(summary = "POST new Cosmetic", description = "Inserisce un nuovo Cosmetico nel Database")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Il nuovo Cosmetico è stato inserito con successo", content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = Message.class))
@@ -91,7 +91,7 @@ public class CosmeticController {
             })
     })
     @PostMapping(path = "/", consumes = MediaType.APPLICATION_JSON_VALUE) @SneakyThrows
-    public ResponseEntity<Message> postCosmetic(@Valid @RequestBody Cosmetic product, BindingResult bindingResult) {
+    public ResponseEntity<Message> postCosmetic(@Parameter(description = "Nuovo Cosmetico da inserire") @Valid @RequestBody Cosmetic product, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             System.out.println(errorMessage.getMessage(bindingResult.getFieldError(), LocaleContextHolder.getLocale()));
             throw new BadRequestException(errorMessage.getMessage(bindingResult.getFieldError(), LocaleContextHolder.getLocale()));
@@ -104,7 +104,7 @@ public class CosmeticController {
         return ResponseEntity.ok(new Message(LocalDate.now(), HttpStatus.OK.value(), "Prodotto inserito con successo!"));
     }
 
-    @Operation(summary = "PUT a Cosmetic", description = "Modifica un Cosmetico registrato nel Database", tags = "Put")
+    @Operation(summary = "PUT a Cosmetic", description = "Modifica un Cosmetico registrato nel Database")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Il Cosmetico è stato registrato con successo", content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = Message.class))
@@ -117,7 +117,7 @@ public class CosmeticController {
             })
     })
     @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE) @SneakyThrows
-    public ResponseEntity<Message> putCosmetic(@PathVariable Long id, @Valid @RequestBody Cosmetic product, BindingResult bindingResult) {
+    public ResponseEntity<Message> putCosmetic(@Parameter(description = "Id del Cosmetico da modificare") @PathVariable Long id, @Parameter(description = "Cosmetico da modificare") @Valid @RequestBody Cosmetic product, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             System.out.println(errorMessage.getMessage(bindingResult.getFieldError(), LocaleContextHolder.getLocale()));
             throw new BadRequestException(errorMessage.getMessage(bindingResult.getFieldError(), LocaleContextHolder.getLocale()));
@@ -131,7 +131,7 @@ public class CosmeticController {
         return ResponseEntity.ok(new Message(LocalDate.now(), HttpStatus.OK.value(), "Prodotto modificato con successo!"));
     }
 
-    @Operation(summary = "DELETE all Cosmetics", description = "Elimina tutti i Cosmetici registrati nel Database", tags = "Delete")
+    @Operation(summary = "DELETE all Cosmetics", description = "Elimina tutti i Cosmetici registrati nel Database")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "I Cosmetici sono stati eliminati correttamente", content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = Message.class))
@@ -150,7 +150,7 @@ public class CosmeticController {
         return ResponseEntity.ok(new Message(LocalDate.now(), HttpStatus.OK.value(), "Prodotti eliminati con successo!"));
     }
 
-    @Operation(summary = "DELETE a Cosmetic by Id", description = "Elimina il Cosmetico identificato dall'Id passato come parametro", tags = "Delete")
+    @Operation(summary = "DELETE a Cosmetic by Id", description = "Elimina il Cosmetico identificato dall'Id passato come parametro")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Il Cosmetico è stato registrato correttamente", content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = Message.class))
@@ -160,7 +160,7 @@ public class CosmeticController {
             })
     })
     @DeleteMapping(path = "/{id}") @SneakyThrows
-    public ResponseEntity<Message> deleteProduct(@PathVariable Long id) {
+    public ResponseEntity<Message> deleteProduct(@Parameter(description = "Id del Cosmetico da eliminare") @PathVariable Long id) {
         final List<CosmeticDTO> products = service.findAll();
         if(products.isEmpty()) {
             throw new ConflictException("Impossibile eliminare un elemento da una collezione vuota!");

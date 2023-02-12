@@ -18,7 +18,6 @@ import it.pharmacywebassistant.service.DrugService;
 import jakarta.validation.Valid;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Description;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.http.HttpStatus;
@@ -34,7 +33,7 @@ import java.util.stream.Stream;
 
 @RestController
 @RequestMapping(path = "v1/api/products/drugs", produces = MediaType.APPLICATION_JSON_VALUE)
-@Tag(name = "DrugController", description = "Controller per le operazioni riguardo un Medicinale")
+@Tag(name = "Drug Controller", description = "Controller per le operazioni riguardo un Medicinale")
 public class DrugController {
 
     @Autowired
@@ -43,7 +42,7 @@ public class DrugController {
     @Autowired
     private ResourceBundleMessageSource errorMessage;
 
-    @Operation(summary = "GET all drugs", description = "Restituisce tutte le Medicine all'interno del Database", tags = "Get")
+    @Operation(summary = "GET all drugs", description = "Restituisce tutte le Medicine all'interno del Database")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Trovate delle Medicine nel Database", content = {
                     @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = DrugDTO.class)))
@@ -61,7 +60,7 @@ public class DrugController {
         return ResponseEntity.ok(products);
     }
 
-    @Operation(summary = "GET Drug by Id", description = "Restituisce la Medicina corrispondente all'id passato come parametro", tags = "Get")
+    @Operation(summary = "GET Drug by Id", description = "Restituisce la Medicina corrispondente all'id passato come parametro")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Trovata una medicina corrispondente all'id passato come parametro", content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = DrugDTO.class))
@@ -79,7 +78,7 @@ public class DrugController {
         return ResponseEntity.ok(product.get());
     }
 
-    @Operation(summary = "POST new Drug", description = "Inserisce una Medicina all'interno del Database", tags = "Post")
+    @Operation(summary = "POST new Drug", description = "Inserisce una Medicina all'interno del Database")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "La nuova Medicina è stata inserita correttamente", content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = Message.class))
@@ -105,7 +104,7 @@ public class DrugController {
         return ResponseEntity.ok(new Message(LocalDate.now(), HttpStatus.OK.value(), "Prodotto inserito con successo!"));
     }
 
-    @Operation(summary = "PUT a Drug", description = "Modifica una Medicina registrata nel Database", tags = "Put")
+    @Operation(summary = "PUT a Drug", description = "Modifica una Medicina registrata nel Database")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "La nuova Medicina è stata modificata correttamente", content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = Message.class))
@@ -132,7 +131,7 @@ public class DrugController {
         return ResponseEntity.ok(new Message(LocalDate.now(), HttpStatus.OK.value(), "Prodotto modificato con successo!"));
     }
 
-    @Operation(summary = "DELETE all Drugs", description = "Elimina tutte le Medicine registrate", tags = "Delete")
+    @Operation(summary = "DELETE all Drugs", description = "Elimina tutte le Medicine registrate")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Le Medicine sono state eliminate correttamente", content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = Message.class))
@@ -151,7 +150,7 @@ public class DrugController {
         return ResponseEntity.ok(new Message(LocalDate.now(), HttpStatus.OK.value(), "Prodotti eliminati con successo!"));
     }
 
-    @Operation(summary = "DELETE a Drug by Id", description = "Elimina la Medicina corrispondente all'id passato come parametro", tags = "Delete")
+    @Operation(summary = "DELETE a Drug by Id", description = "Elimina la Medicina corrispondente all'id passato come parametro")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "La Medicina è stata eliminata correttamente", content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = Message.class))
