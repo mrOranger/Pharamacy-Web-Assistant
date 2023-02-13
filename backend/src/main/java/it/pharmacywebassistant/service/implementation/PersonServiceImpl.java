@@ -1,8 +1,6 @@
 package it.pharmacywebassistant.service.implementation;
 
-import it.pharmacywebassistant.model.Drug;
 import it.pharmacywebassistant.model.Person;
-import it.pharmacywebassistant.model.dto.DrugDTO;
 import it.pharmacywebassistant.model.dto.PersonDTO;
 import it.pharmacywebassistant.repository.PersonRepository;
 import it.pharmacywebassistant.service.PersonService;
