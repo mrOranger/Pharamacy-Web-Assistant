@@ -1,6 +1,9 @@
 package it.pharmacywebassistant.service.implementation;
 
+import it.pharmacywebassistant.model.Patient;
 import it.pharmacywebassistant.model.Person;
+import it.pharmacywebassistant.model.dto.DoctorDTO;
+import it.pharmacywebassistant.model.dto.PatientDTO;
 import it.pharmacywebassistant.model.dto.PersonDTO;
 import it.pharmacywebassistant.repository.PersonRepository;
 import it.pharmacywebassistant.service.PersonService;
@@ -48,10 +51,17 @@ public class PersonServiceImpl implements PersonService {
     }
 
     public PersonDTO convertToDto(Person person) {
+
         PersonDTO personDTO = null;
 
-        if(person != null) {
-            personDTO = this.modelMapper.map(person, PersonDTO.class);
+        if(person instanceof Patient) {
+            if(person != null) {
+                personDTO = this.modelMapper.map(person, PatientDTO.class);
+            }
+        } else {
+            if(person != null) {
+                personDTO = this.modelMapper.map(person, DoctorDTO.class);
+            }
         }
 
         return personDTO;
@@ -59,7 +69,11 @@ public class PersonServiceImpl implements PersonService {
     public Optional<PersonDTO> convertToDto(Optional<Person> person) {
 
         if(person.isPresent()) {
-            return Optional.of(this.modelMapper.map(person, PersonDTO.class));
+            if(person.get() instanceof Patient) {
+                return Optional.of(this.modelMapper.map(person, PatientDTO.class));
+            } else {
+                return Optional.of(this.modelMapper.map(person, DoctorDTO.class));
+            }
         }
 
         return Optional.empty();
@@ -67,7 +81,12 @@ public class PersonServiceImpl implements PersonService {
 
     public List<PersonDTO> convertToDto(List<Person> personList) {
         return personList.stream()
-                .map((source) -> this.modelMapper.map(source, PersonDTO.class))
-                .collect(Collectors.toList());
+                .map((source) -> {
+                    if(source instanceof Patient) {
+                        return this.modelMapper.map(source, PatientDTO.class);
+                    } else {
+                        return this.modelMapper.map(source, DoctorDTO.class);
+                    }
+                }).collect(Collectors.toList());
     }
 }
