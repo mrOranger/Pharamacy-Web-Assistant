@@ -34,12 +34,12 @@ public final class TestPatientService {
 
     @Test @Order(2)
     public void testGetPatientByTaxCodeReturnsEmptyOptional() {
-        assertThat(service.findByTaxCode("AB123").isEmpty());
+        assertThat(service.findByTaxCode("AB123").isEmpty()).isEqualTo(true);
     }
 
     @Test @Order(3)
     public void testAddNewPatientWithTaxCodeAB123() {
-        assertThat(service.save(patient).getTaxCode()).isEqualTo("AB123");
+        assertThat(service.save(patient).getTaxCode()).isEqualTo(patient.getTaxCode());
     }
 
     @Test @Order(4)
@@ -49,7 +49,7 @@ public final class TestPatientService {
 
     @Test @Order(5)
     public void testGetPatientByTaxCodeReturnsPresentOptional() {
-        assertThat(service.findByTaxCode(patient.getTaxCode()).isPresent());
+        assertThat(service.findByTaxCode(patient.getTaxCode()).isPresent()).isEqualTo(true);
         assertThat(service.findByTaxCode(patient.getTaxCode()).get().getTaxCode()).isEqualTo(patient.getTaxCode());
         assertThat(service.findByTaxCode(patient.getTaxCode()).get().getFirstName()).isEqualTo(patient.getFirstName());
         assertThat(service.findByTaxCode(patient.getTaxCode()).get().getLastName()).isEqualTo(patient.getLastName());
@@ -81,7 +81,7 @@ public final class TestPatientService {
 
     @Test @Order(10)
     public void testGetPatientByIdReturnsUpdatedPatient() {
-        assertThat(service.findByTaxCode(patient.getTaxCode()).isPresent());
+        assertThat(service.findByTaxCode(patient.getTaxCode()).isPresent()).isEqualTo(true);
         assertThat(service.findByTaxCode(patient.getTaxCode()).get().getTaxCode()).isEqualTo(patient.getTaxCode());
         assertThat(service.findByTaxCode(patient.getTaxCode()).get().getFirstName()).isEqualTo(patient.getFirstName());
         assertThat(service.findByTaxCode(patient.getTaxCode()).get().getLastName()).isEqualTo(patient.getLastName());
@@ -90,8 +90,8 @@ public final class TestPatientService {
 
     @Test @Order(11)
     public void testDeletePatientAndPatientListEmpty() {
-        service.deleteByTaxCode("AB123");
-        assertThat(service.findAll().isEmpty());
+        service.deleteByTaxCode(patient.getTaxCode());
+        assertThat(service.findAll().isEmpty()).isEqualTo(true);
     }
 
     @Test @Order(12)
@@ -102,7 +102,7 @@ public final class TestPatientService {
 
     @Test @Order(10)
     public void testGetPatientByIdReturnsNewPatient() {
-        assertThat(service.findByTaxCode(patient.getTaxCode()).isPresent());
+        assertThat(service.findByTaxCode(patient.getTaxCode()).isPresent()).isEqualTo(true);
         assertThat(service.findByTaxCode(patient.getTaxCode()).get().getTaxCode()).isEqualTo(patient.getTaxCode());
         assertThat(service.findByTaxCode(patient.getTaxCode()).get().getFirstName()).isEqualTo(patient.getFirstName());
         assertThat(service.findByTaxCode(patient.getTaxCode()).get().getLastName()).isEqualTo(patient.getLastName());
@@ -113,6 +113,6 @@ public final class TestPatientService {
     @Test @Order(13)
     public void testDeleteAllPatientsAndPatientListEmpty() {
         service.deleteAll();
-        assertThat(service.findAll().isEmpty());
+        assertThat(service.findAll().isEmpty()).isEqualTo(true);
     }
 }
