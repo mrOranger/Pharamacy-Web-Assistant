@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
 
 import java.io.Serial;
@@ -12,7 +14,7 @@ import java.io.Serializable;
 
 @Entity(name = "Product") @Table(name = "Products")
 @Inheritance(strategy = InheritanceType.JOINED)
-@NoArgsConstructor
+@NoArgsConstructor @Getter @Setter
 public abstract class Product implements Serializable {
 
     @Serial
@@ -46,45 +48,5 @@ public abstract class Product implements Serializable {
         this.name = name;
         this.description = description;
         this.cost = cost;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Double getCost() {
-        return cost;
-    }
-
-    public void setCost(Double cost) {
-        this.cost = cost;
-    }
-
-    public Company getCompany() {
-        return company;
-    }
-
-    public void setCompany(Company company) {
-        this.company = company;
     }
 }
