@@ -7,11 +7,17 @@ import lombok.Setter;
 
 import java.sql.Date;
 
-@Getter @Setter @AllArgsConstructor @NoArgsConstructor
+@Getter @Setter @NoArgsConstructor
 public abstract class PersonDTO {
     private String taxCode;
     private String firstName;
     private String lastName;
     private Date dateOfBirth;
-    private AddressDTO residence;
+
+    public PersonDTO(String taxCode, String firstName, String lastName, Date dateOfBirth) {
+        this.taxCode = taxCode;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.dateOfBirth = dateOfBirth;
+    }
 }
