@@ -1,5 +1,7 @@
 package it.pharmacywebassistant.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.NoArgsConstructor;
@@ -27,12 +29,14 @@ public final class Prescription implements Serializable {
     @NotNull(message = "{Prescription.Doctor.NotNull}")
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "doctor", referencedColumnName = "taxCode")
+    @JsonBackReference
     private Person doctor;
 
 
     @NotNull(message = "{Prescription.Patient.NotNull}")
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "patient", referencedColumnName = "taxCode")
+    @JsonBackReference
     private Person patient;
 
 
@@ -42,6 +46,7 @@ public final class Prescription implements Serializable {
             joinColumns = { @JoinColumn(name = "Prescription") },
             inverseJoinColumns = { @JoinColumn(name = "Drug") }
     )
+    @JsonManagedReference
     private Collection<Drug> drugs = new ArrayList<>();
 
     public Prescription(Long id, Date date, Doctor doctor, Patient patient) {

@@ -1,5 +1,6 @@
 package it.pharmacywebassistant.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.NoArgsConstructor;
@@ -33,6 +34,7 @@ public final class Degree implements Serializable {
     private String university;
 
     @OneToOne(mappedBy = "degree")
+    @JsonBackReference
     private Doctor doctor;
 
     public Degree(Long id, Byte vote, Date releaseDate, String university) {

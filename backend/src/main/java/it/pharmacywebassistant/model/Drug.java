@@ -1,5 +1,6 @@
 package it.pharmacywebassistant.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
@@ -27,6 +28,7 @@ public final class Drug extends Product implements Serializable {
     }
 
     @ManyToMany(mappedBy = "drugs")
+    @JsonBackReference
     private List<Prescription> prescriptionList = new ArrayList<>();
 
     public Boolean getHasPrescription() {

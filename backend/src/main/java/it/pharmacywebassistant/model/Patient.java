@@ -1,5 +1,6 @@
 package it.pharmacywebassistant.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 
@@ -16,6 +17,7 @@ public final class Patient extends Person implements Serializable {
     private static final long serialVersionUID = -18274019284732L;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "id")
+    @JsonManagedReference
     private List<Prescription> prescriptionList = new ArrayList<>();
 
     public Patient(String taxCode, String firstName, String lastName, Date dateOfBirth, Address residence) {

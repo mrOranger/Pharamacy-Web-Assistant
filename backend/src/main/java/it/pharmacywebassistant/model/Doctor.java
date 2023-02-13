@@ -1,5 +1,6 @@
 package it.pharmacywebassistant.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.NoArgsConstructor;
@@ -20,13 +21,16 @@ public final class Doctor extends Person implements Serializable {
     @NotNull(message = "{Doctor.Degree.NotNull}")
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "degree", referencedColumnName = "id")
+    @JsonManagedReference
     private Degree degree;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "specialization", referencedColumnName = "id")
+    @JsonManagedReference
     private Specialization specialization;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "id")
+    @JsonManagedReference
     private List<Prescription> prescriptionList = new ArrayList<>();
 
     public Doctor(String taxCode, String firstName, String lastName, Date dateOfBirth, Address residence, Degree degree) {

@@ -1,5 +1,6 @@
 package it.pharmacywebassistant.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.NoArgsConstructor;
@@ -38,6 +39,7 @@ public final class Specialization implements Serializable {
     private String type;
 
     @OneToOne(mappedBy = "specialization")
+    @JsonBackReference
     private Doctor doctor;
 
     public Specialization(Long id, Byte vote, Date releaseDate, String university, String type) {
