@@ -1,8 +1,6 @@
 package it.pharmacywebassistant.service.implementation;
 
-import it.pharmacywebassistant.model.Drug;
 import it.pharmacywebassistant.model.Prescription;
-import it.pharmacywebassistant.model.dto.DrugDTO;
 import it.pharmacywebassistant.model.dto.PrescriptionDTO;
 import it.pharmacywebassistant.repository.PrescriptionRepository;
 import it.pharmacywebassistant.service.PrescriptionService;
@@ -16,7 +14,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service @Transactional(readOnly = true)
-public class PrescriptionServiceImpl implements PrescriptionService {
+public final class PrescriptionServiceImpl implements PrescriptionService {
 
     @Autowired
     private PrescriptionRepository repository;
