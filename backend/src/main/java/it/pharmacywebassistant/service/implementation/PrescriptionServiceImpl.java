@@ -14,7 +14,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service @Transactional(readOnly = true)
-public final class PrescriptionServiceImpl implements PrescriptionService {
+public class PrescriptionServiceImpl implements PrescriptionService {
 
     @Autowired
     private PrescriptionRepository repository;
