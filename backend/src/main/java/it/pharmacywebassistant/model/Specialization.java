@@ -40,13 +40,12 @@ public final class Specialization implements Serializable {
     @OneToOne(mappedBy = "specialization")
     private Doctor doctor;
 
-    public Specialization(Long id, Byte vote, Date releaseDate, String university, String type, Doctor doctor) {
+    public Specialization(Long id, Byte vote, Date releaseDate, String university, String type) {
         this.id = id;
         this.vote = vote;
         this.releaseDate = releaseDate;
         this.university = university;
         this.type = type;
-        this.doctor = doctor;
     }
 
     public Long getId() {
@@ -87,13 +86,5 @@ public final class Specialization implements Serializable {
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public Doctor getDoctor() {
-        return doctor;
-    }
-
-    public void setDoctor(Doctor doctor) {
-        this.doctor = doctor;
     }
 }

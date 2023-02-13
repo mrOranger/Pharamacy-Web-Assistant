@@ -35,12 +35,11 @@ public final class Degree implements Serializable {
     @OneToOne(mappedBy = "degree")
     private Doctor doctor;
 
-    public Degree(Long id, Byte vote, Date releaseDate, String university, Doctor doctor) {
+    public Degree(Long id, Byte vote, Date releaseDate, String university) {
         this.id = id;
         this.vote = vote;
         this.releaseDate = releaseDate;
         this.university = university;
-        this.doctor = doctor;
     }
 
     public Long getId() {
@@ -73,13 +72,5 @@ public final class Degree implements Serializable {
 
     public void setUniversity(String university) {
         this.university = university;
-    }
-
-    public Doctor getDoctor() {
-        return doctor;
-    }
-
-    public void setDoctor(Doctor doctor) {
-        this.doctor = doctor;
     }
 }
