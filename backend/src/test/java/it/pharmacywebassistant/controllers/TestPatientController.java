@@ -7,13 +7,23 @@ import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.List;
+
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.isA;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ContextConfiguration(classes = PharmacyWebAssistantApplication.class)
 @SpringBootTest @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -39,63 +49,277 @@ public final class TestPatientController {
                 .put("dateOfBirth", Date.valueOf(LocalDate.now()));
     }
 
-    @Test @Order(1)
+    @Test @Order(1) @SneakyThrows
     public void testGetAllPatientsReturnsMessageWithNotFoundCode() {
-
+        mockMvc.perform(MockMvcRequestBuilders.get("/v1/api/patients/")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.value()))
+                .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
+                .andExpect(jsonPath("$.message").value("Nessun elemento presente nel database!"))
+                .andDo(print());
     }
 
-    @Test @Order(2)
+    @Test @Order(2) @SneakyThrows
     public void testGetPatientByIdReturnsMessageWithNotFoundCode() {
-
+        mockMvc.perform(MockMvcRequestBuilders.get("/v1/api/patients/1")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.value()))
+                .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
+                .andExpect(jsonPath("$.message").value("Nessun elemento presente nel database!"))
+                .andDo(print());
     }
 
-    @Test @Order(3)
+    @Test @Order(3) @SneakyThrows
     public void testPostNewPatientReturnsMessageWithOkCode() {
+        mockMvc.perform(MockMvcRequestBuilders.post("/v1/api/patients/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(String.valueOf(patient))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(HttpStatus.OK.value()))
+                .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
+                .andExpect(jsonPath("$.message").value("Persona inserita con successo!"))
+                .andDo(print());
 
+        mockMvc.perform(MockMvcRequestBuilders.get("/v1/api/patients/")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.*", isA(List.class)))
+                .andExpect(jsonPath("$.*", hasSize(1)))
+                .andDo(print());
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/v1/api/patients/1")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.taxCode").value(patient.get("taxCode")))
+                .andExpect(jsonPath("$.firstName").value(patient.get("firstName")))
+                .andExpect(jsonPath("$.lastName").value(patient.get("lastName")))
+                .andExpect(jsonPath("$.dateOfBirth").value(patient.get("dateOfBirth")))
+                .andDo(print());
     }
 
-    @Test @Order(4)
+    @Test @Order(4) @SneakyThrows
     public void testPostNewPatientReturnsMessageWithConflictCode() {
+        mockMvc.perform(MockMvcRequestBuilders.post("/v1/api/patients/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(String.valueOf(patient))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.code").value(HttpStatus.CONFLICT.value()))
+                .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
+                .andExpect(jsonPath("$.message").value("Elemento già presente all'interno del database!"))
+                .andDo(print());
+    }
+
+    @Test @Order(5) @SneakyThrows
+    public void testPostNewPatientWithoutTaxCodeReturnsMessageWithBadRequestCode() {
+
+        patient.remove("taxCode");
+        mockMvc.perform(MockMvcRequestBuilders.post("/v1/api/patients/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(String.valueOf(patient))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
+                .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
+                .andExpect(jsonPath("$.message").value("Il Codice Fiscale della Persona non può essere nullo"))
+                .andDo(print());
 
     }
 
-    @Test @Order(5)
-    public void testPostNewPatientReturnsMessageWithBadRequestCode() {
+    @Test @Order(6) @SneakyThrows
+    public void testPostNewPatientWithoutFirstNameReturnsMessageWithBadRequestCode() {
+
+        patient.remove("firstName");
+        mockMvc.perform(MockMvcRequestBuilders.post("/v1/api/patients/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(String.valueOf(patient))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
+                .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
+                .andExpect(jsonPath("$.message").value("Il Nome della Persona non può essere nullo"))
+                .andDo(print());
 
     }
 
-    @Test @Order(6)
+    @Test @Order(7) @SneakyThrows
+    public void testPostNewPatientWithoutLastNameReturnsMessageWithBadRequestCode() {
+
+        patient.remove("lastName");
+        mockMvc.perform(MockMvcRequestBuilders.post("/v1/api/patients/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(String.valueOf(patient))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
+                .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
+                .andExpect(jsonPath("$.message").value("Il Cognome della Persona non può essere nullo"))
+                .andDo(print());
+
+    }
+
+    @Test @Order(7) @SneakyThrows
+    public void testPostNewPatientWithoutDateOfBirthReturnsMessageWithBadRequestCode() {
+
+        patient.remove("dateOfBirth");
+        mockMvc.perform(MockMvcRequestBuilders.post("/v1/api/patients/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(String.valueOf(patient))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
+                .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
+                .andExpect(jsonPath("$.message").value("La Data di Nascita della Persona non può essere nulla"))
+                .andDo(print());
+
+    }
+
+    @Test @Order(8) @SneakyThrows
     public void testPutPatientReturnsMessageWithOkCode() {
-
+        mockMvc.perform(MockMvcRequestBuilders.put("/v1/api/patients/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(String.valueOf(patient))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(HttpStatus.OK.value()))
+                .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
+                .andExpect(jsonPath("$.message").value("Persona modificata con successo!"))
+                .andDo(print());
     }
 
-    @Test @Order(7)
-    public void testPutPatientReturnsMessageWithBadRequestCode() {
-
+    @Test @Order(9) @SneakyThrows
+    public void testPutPatientWithoutFirstNameReturnsMessageWithBadRequestCode() {
+        patient.remove("firstName");
+        mockMvc.perform(MockMvcRequestBuilders.put("/v1/api/patients/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(String.valueOf(patient))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
+                .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
+                .andExpect(jsonPath("$.message").value("Il Nome della Persona non può essere nullo"))
+                .andDo(print());
     }
 
-    @Test @Order(8)
+    @Test @Order(10) @SneakyThrows
+    public void testPutPatientWithoutLastNameReturnsMessageWithBadRequestCode() {
+        patient.remove("lastName");
+        mockMvc.perform(MockMvcRequestBuilders.put("/v1/api/patients/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(String.valueOf(patient))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
+                .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
+                .andExpect(jsonPath("$.message").value("Il Cognome della Persona non può essere nullo"))
+                .andDo(print());
+    }
+
+    @Test @Order(11) @SneakyThrows
+    public void testPutPatientWithoutBirthDateReturnsMessageWithBadRequestCode() {
+        patient.remove("dateOfBirth");
+        mockMvc.perform(MockMvcRequestBuilders.put("/v1/api/patients/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(String.valueOf(patient))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
+                .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
+                .andExpect(jsonPath("$.message").value("La Data di Nascita della Persona non può essere nulla"))
+                .andDo(print());
+    }
+
+    @Test @Order(12) @SneakyThrows
     public void testPutPatientReturnsMessageWithNotFoundCode() {
-
+        mockMvc.perform(MockMvcRequestBuilders.put("/v1/api/patients/2")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(String.valueOf(patient))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.value()))
+                .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
+                .andExpect(jsonPath("$.message").value("Questa persona non è presenta nel Database, usare metodo POST per inserirla!"))
+                .andDo(print());
     }
 
-    @Test @Order(9)
+    @Test @Order(13) @SneakyThrows
     public void testDeletePatientByIdReturnsMessageWithOkCode() {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/v1/api/patients/1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(HttpStatus.OK.value()))
+                .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
+                .andExpect(jsonPath("$.message").value("Paziente eliminato con successo!"))
+                .andDo(print());
 
+        mockMvc.perform(MockMvcRequestBuilders.get("/v1/api/patients/")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.value()))
+                .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
+                .andExpect(jsonPath("$.message").value("Nessun elemento presente nel database!"))
+                .andDo(print());
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/v1/api/patients/1")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.value()))
+                .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
+                .andExpect(jsonPath("$.message").value("Nessun elemento presente nel database!"))
+                .andDo(print());
     }
 
-    @Test @Order(10)
-    public void testDeletePatientByIdReturnsMessageWithNotFoundCode() {
-
-    }
-
-    @Test @Order(11)
+    @Test @Order(15) @SneakyThrows
     public void testDeleteAllPatientsReturnsMessageWithOkCode() {
 
+        mockMvc.perform(MockMvcRequestBuilders.post("/v1/api/patients/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(String.valueOf(patient))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(HttpStatus.OK.value()))
+                .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
+                .andExpect(jsonPath("$.message").value("Persona inserita con successo!"))
+                .andDo(print());
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/v1/api/patients/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(HttpStatus.OK.value()))
+                .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
+                .andExpect(jsonPath("$.message").value("Pazienti eliminati con successo!"))
+                .andDo(print());
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/v1/api/patients/")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.value()))
+                .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
+                .andExpect(jsonPath("$.message").value("Nessun elemento presente nel database!"))
+                .andDo(print());
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/v1/api/patients/1")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.value()))
+                .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
+                .andExpect(jsonPath("$.message").value("Nessun elemento presente nel database!"))
+                .andDo(print());
     }
 
-    @Test @Order(12)
+    @Test @Order(16) @SneakyThrows
     public void testDeleteAllPatientsReturnsMessageWithConflictCode() {
-
+        mockMvc.perform(MockMvcRequestBuilders.delete("/v1/api/patients/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.code").value(HttpStatus.CONFLICT.value()))
+                .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
+                .andExpect(jsonPath("$.message").value("Impossibile eliminare una collezione vuota!"))
+                .andDo(print());
     }
 }
