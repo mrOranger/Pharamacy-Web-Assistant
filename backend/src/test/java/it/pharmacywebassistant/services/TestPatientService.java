@@ -29,7 +29,7 @@ public final class TestPatientService {
 
     @Test @Order(1)
     public void testGetAllPatientsReturnsEmptyArray() {
-        assertThat(service.findAll().size()).isEqualTo(0);
+        assertThat(service.findAllPatients().size()).isEqualTo(0);
     }
 
     @Test @Order(2)
@@ -44,7 +44,7 @@ public final class TestPatientService {
 
     @Test @Order(4)
     public void testGetAllPatientsReturnsArrayOfSizeOne() {
-        assertThat(service.findAll().size()).isEqualTo(1);
+        assertThat(service.findAllPatients().size()).isEqualTo(1);
     }
 
     @Test @Order(5)
@@ -76,7 +76,7 @@ public final class TestPatientService {
 
     @Test @Order(9)
     public void testGetAllPatientsReturnsArrayOfSizeOneWithUpdatedPatient() {
-        assertThat(service.findAll().size()).isEqualTo(1);
+        assertThat(service.findAllPatients().size()).isEqualTo(1);
     }
 
     @Test @Order(10)
@@ -91,7 +91,7 @@ public final class TestPatientService {
     @Test @Order(11)
     public void testDeletePatientAndPatientListEmpty() {
         service.deleteByTaxCode(patient.getTaxCode());
-        assertThat(service.findAll().isEmpty()).isEqualTo(true);
+        assertThat(service.findAllPatients().isEmpty()).isEqualTo(true);
     }
 
     @Test @Order(12)
@@ -113,6 +113,6 @@ public final class TestPatientService {
     @Test @Order(13)
     public void testDeleteAllPatientsAndPatientListEmpty() {
         service.deleteAll();
-        assertThat(service.findAll().isEmpty()).isEqualTo(true);
+        assertThat(service.findAllPatients().isEmpty()).isEqualTo(true);
     }
 }

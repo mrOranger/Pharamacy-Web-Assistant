@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public final class TestCosmetics {
+public final class TestCosmeticService {
 
     @Autowired
     private ProductService service;

@@ -7,6 +7,4 @@ import java.util.List;
 
 public interface PersonRepository extends JpaRepository<Person, String> {
 
-    public abstract List<Person> findByDType(String type);
-
 }

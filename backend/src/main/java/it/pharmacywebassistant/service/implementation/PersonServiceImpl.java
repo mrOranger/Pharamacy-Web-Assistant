@@ -2,6 +2,8 @@ package it.pharmacywebassistant.service.implementation;
 
 import it.pharmacywebassistant.mapper.PersonMapper;
 import it.pharmacywebassistant.model.Person;
+import it.pharmacywebassistant.model.dto.DoctorDTO;
+import it.pharmacywebassistant.model.dto.PatientDTO;
 import it.pharmacywebassistant.model.dto.PersonDTO;
 import it.pharmacywebassistant.repository.PersonRepository;
 import it.pharmacywebassistant.service.PersonService;
@@ -22,8 +24,19 @@ public class PersonServiceImpl implements PersonService {
     private PersonRepository repository;
 
     @Override
-    public List<PersonDTO> findAll() {
-        return convertToDto(repository.findAll());
+    public List<PersonDTO> findAllPatients() {
+        return convertToDto(repository.findAll())
+                .stream()
+                .filter(person -> person instanceof PatientDTO)
+                .toList();
+    }
+
+    @Override
+    public List<PersonDTO> findAllDoctors() {
+        return convertToDto(repository.findAll())
+                .stream()
+                .filter(person -> person instanceof DoctorDTO)
+                .toList();
     }
 
     @Override
