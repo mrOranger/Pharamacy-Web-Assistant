@@ -55,7 +55,6 @@ public final class PatientController {
 
     @PostMapping(path = "/", consumes = MediaType.APPLICATION_JSON_VALUE) @SneakyThrows
     public ResponseEntity<Message> postPatient(@Valid @RequestBody Patient patient, BindingResult bindingResult) {
-        System.out.println(patient.getTaxCode());
         if(bindingResult.hasErrors()) {
             System.out.println(errorMessage.getMessage(bindingResult.getFieldError(), LocaleContextHolder.getLocale()));
             throw new BadRequestException(errorMessage.getMessage(bindingResult.getFieldError(), LocaleContextHolder.getLocale()));
