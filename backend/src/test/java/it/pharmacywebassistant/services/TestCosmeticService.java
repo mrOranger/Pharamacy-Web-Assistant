@@ -21,11 +21,11 @@ public final class TestCosmeticService {
 
     @BeforeEach
     public void beforeEach() {
-        this.address = new Address("Prova", 2l, "Prova", "Prova");
+        this.address = new Address("Prova", 2L, "Prova", "Prova");
         this.company = new Company("Prova", this.address);
         this.cosmetic = new Cosmetic("Prova", "Prova", 1000.00, "Prova");
         this.cosmetic.setCompany(this.company);
-        this.cosmetic.setId(1l);
+        this.cosmetic.setId(1L);
     }
 
     @Test @Order(1)
@@ -54,7 +54,7 @@ public final class TestCosmeticService {
     @Test @Order(5)
     public void testDeleteAnExistingCosmeticReturnsACollectionOfSizeOne() {
         service.deleteById(this.cosmetic.getId());
-        assertThat(service.findById(this.cosmetic.getId()).isEmpty());
+        assertThat(service.findById(this.cosmetic.getId()).isEmpty()).isEqualTo(true);
     }
 
     @Test @Order(6)

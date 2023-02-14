@@ -21,11 +21,11 @@ public class TestDrugService {
 
     @BeforeEach
     public void beforeEach() {
-        this.address = new Address("Prova", 2l, "Prova", "Prova");
+        this.address = new Address("Prova", 2L, "Prova", "Prova");
         this.company = new Company("Prova", this.address);
         this.drug = new Drug("Prova", "Prova", 1000.00, true);
         this.drug.setCompany(this.company);
-        this.drug.setId(1l);
+        this.drug.setId(1L);
     }
 
     @Test
@@ -55,7 +55,7 @@ public class TestDrugService {
     @Test @Order(5)
     public void testDeleteAnExistingDrugReturnsAnEmptyOptional() {
         service.deleteById(this.drug.getId());
-        assertThat(service.findById(this.drug.getId()).isEmpty());
+        assertThat(service.findById(this.drug.getId()).isEmpty()).isEqualTo(true);
     }
 
     @Test @Order(6)
