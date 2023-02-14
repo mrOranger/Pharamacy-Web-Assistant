@@ -1,6 +1,5 @@
 package it.pharmacywebassistant.mapper;
 
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import it.pharmacywebassistant.model.Patient;
 import it.pharmacywebassistant.model.Person;
 import it.pharmacywebassistant.model.dto.DoctorDTO;
@@ -21,11 +20,11 @@ public class PersonMapper implements Function<Person, PersonDTO> {
         }
     }
 
-    private final PatientDTO convertPatientInPatientDTO(Person person) {
+    private PatientDTO convertPatientInPatientDTO(Person person) {
         return new PatientDTO(person.getTaxCode(), person.getFirstName(), person.getLastName(), person.getDateOfBirth());
     }
 
-    private final DoctorDTO convertDoctorInDoctorDTO(Person person) {
+    private DoctorDTO convertDoctorInDoctorDTO(Person person) {
         return new DoctorDTO(person.getTaxCode(), person.getFirstName(), person.getLastName(), person.getDateOfBirth());
     }
 }
