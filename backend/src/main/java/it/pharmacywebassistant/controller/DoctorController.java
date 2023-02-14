@@ -37,7 +37,7 @@ public final class DoctorController {
 
     @GetMapping(path = "/") @SneakyThrows
     public ResponseEntity<List<PersonDTO>> getAllDoctors() {
-        final List<PersonDTO> patientDTOList = service.findAllPatients();
+        final List<PersonDTO> patientDTOList = service.findAllDoctors();
         if(patientDTOList.isEmpty()) {
             throw new NotFoundException("Nessun Dottore registrato nel Database!");
         }
