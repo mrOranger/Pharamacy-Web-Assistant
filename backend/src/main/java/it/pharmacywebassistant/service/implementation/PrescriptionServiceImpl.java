@@ -1,9 +1,7 @@
 package it.pharmacywebassistant.service.implementation;
 
 import it.pharmacywebassistant.mapper.PrescriptionMapper;
-import it.pharmacywebassistant.model.Person;
 import it.pharmacywebassistant.model.Prescription;
-import it.pharmacywebassistant.model.dto.PersonDTO;
 import it.pharmacywebassistant.model.dto.PrescriptionDTO;
 import it.pharmacywebassistant.repository.PrescriptionRepository;
 import it.pharmacywebassistant.service.PrescriptionService;
