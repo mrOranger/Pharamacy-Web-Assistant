@@ -56,7 +56,7 @@ public final class TestPatientController {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.value()))
                 .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
-                .andExpect(jsonPath("$.message").value("Nessun elemento presente nel database!"))
+                .andExpect(jsonPath("$.message").value("Nessun Paziente registrato nel Database!"))
                 .andDo(print());
     }
 
@@ -67,7 +67,7 @@ public final class TestPatientController {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.value()))
                 .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
-                .andExpect(jsonPath("$.message").value("Nessun elemento presente nel database!"))
+                .andExpect(jsonPath("$.message").value("Il Paziente non è registrato nel Database!"))
                 .andDo(print());
     }
 
@@ -80,7 +80,7 @@ public final class TestPatientController {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(HttpStatus.OK.value()))
                 .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
-                .andExpect(jsonPath("$.message").value("Persona inserita con successo!"))
+                .andExpect(jsonPath("$.message").value("Paziente inserito con successo!"))
                 .andDo(print());
 
         mockMvc.perform(MockMvcRequestBuilders.get("/v1/api/patients/")
@@ -109,7 +109,7 @@ public final class TestPatientController {
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.code").value(HttpStatus.CONFLICT.value()))
                 .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
-                .andExpect(jsonPath("$.message").value("Elemento già presente all'interno del database!"))
+                .andExpect(jsonPath("$.message").value("Il Paziente e' gia' registrato nel Database, usare metodo PUT per modificarlo!"))
                 .andDo(print());
     }
 
@@ -124,7 +124,7 @@ public final class TestPatientController {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
                 .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
-                .andExpect(jsonPath("$.message").value("Il Codice Fiscale della Persona non può essere nullo"))
+                .andExpect(jsonPath("$.message").value("Il Codice Fiscale non può essere nullo!"))
                 .andDo(print());
 
     }
@@ -140,7 +140,7 @@ public final class TestPatientController {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
                 .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
-                .andExpect(jsonPath("$.message").value("Il Nome della Persona non può essere nullo"))
+                .andExpect(jsonPath("$.message").value("Il Nome non può essere nullo!"))
                 .andDo(print());
 
     }
@@ -156,7 +156,7 @@ public final class TestPatientController {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
                 .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
-                .andExpect(jsonPath("$.message").value("Il Cognome della Persona non può essere nullo"))
+                .andExpect(jsonPath("$.message").value("Il Cognome non può essere nullo!"))
                 .andDo(print());
 
     }
@@ -172,7 +172,7 @@ public final class TestPatientController {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
                 .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
-                .andExpect(jsonPath("$.message").value("La Data di Nascita della Persona non può essere nulla"))
+                .andExpect(jsonPath("$.message").value("La Data di Nascita non puo' essere nulla!"))
                 .andDo(print());
 
     }
@@ -186,7 +186,7 @@ public final class TestPatientController {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(HttpStatus.OK.value()))
                 .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
-                .andExpect(jsonPath("$.message").value("Persona modificata con successo!"))
+                .andExpect(jsonPath("$.message").value("Paziente modificato con successo!"))
                 .andDo(print());
     }
 
@@ -200,7 +200,7 @@ public final class TestPatientController {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
                 .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
-                .andExpect(jsonPath("$.message").value("Il Nome della Persona non può essere nullo"))
+                .andExpect(jsonPath("$.message").value("Il Nome non può essere nullo!"))
                 .andDo(print());
     }
 
@@ -214,7 +214,7 @@ public final class TestPatientController {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
                 .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
-                .andExpect(jsonPath("$.message").value("Il Cognome della Persona non può essere nullo"))
+                .andExpect(jsonPath("$.message").value("Il Cognome non può essere nullo!"))
                 .andDo(print());
     }
 
@@ -228,7 +228,7 @@ public final class TestPatientController {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
                 .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
-                .andExpect(jsonPath("$.message").value("La Data di Nascita della Persona non può essere nulla"))
+                .andExpect(jsonPath("$.message").value("La Data di Nascita non può essere nulla!"))
                 .andDo(print());
     }
 
@@ -241,7 +241,7 @@ public final class TestPatientController {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.value()))
                 .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
-                .andExpect(jsonPath("$.message").value("Questa persona non è presenta nel Database, usare metodo POST per inserirla!"))
+                .andExpect(jsonPath("$.message").value("Il Paziente non è registrato nel Database, usare metodo POST per inserirne uno nuovo!"))
                 .andDo(print());
     }
 
@@ -260,7 +260,7 @@ public final class TestPatientController {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.value()))
                 .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
-                .andExpect(jsonPath("$.message").value("Nessun elemento presente nel database!"))
+                .andExpect(jsonPath("$.message").value("Nessun Paziente registrato nel Database!"))
                 .andDo(print());
 
         mockMvc.perform(MockMvcRequestBuilders.get("/v1/api/patients/1")
@@ -268,7 +268,7 @@ public final class TestPatientController {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.value()))
                 .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
-                .andExpect(jsonPath("$.message").value("Nessun elemento presente nel database!"))
+                .andExpect(jsonPath("$.message").value("Il Paziente non è registrato nel Database!"))
                 .andDo(print());
     }
 
@@ -282,7 +282,7 @@ public final class TestPatientController {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(HttpStatus.OK.value()))
                 .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
-                .andExpect(jsonPath("$.message").value("Persona inserita con successo!"))
+                .andExpect(jsonPath("$.message").value("Paziente eliminato con successo!"))
                 .andDo(print());
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/v1/api/patients/")
@@ -299,7 +299,7 @@ public final class TestPatientController {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.value()))
                 .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
-                .andExpect(jsonPath("$.message").value("Nessun elemento presente nel database!"))
+                .andExpect(jsonPath("$.message").value("Nessun Paziente registrato nel Database!"))
                 .andDo(print());
 
         mockMvc.perform(MockMvcRequestBuilders.get("/v1/api/patients/1")
@@ -307,7 +307,7 @@ public final class TestPatientController {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.value()))
                 .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
-                .andExpect(jsonPath("$.message").value("Nessun elemento presente nel database!"))
+                .andExpect(jsonPath("$.message").value("Il Paziente non è registrato nel Database!"))
                 .andDo(print());
     }
 
@@ -319,7 +319,7 @@ public final class TestPatientController {
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.code").value(HttpStatus.CONFLICT.value()))
                 .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
-                .andExpect(jsonPath("$.message").value("Impossibile eliminare una collezione vuota!"))
+                .andExpect(jsonPath("$.message").value("Nessun Paziente registrato nel Database!"))
                 .andDo(print());
     }
 }

@@ -3,7 +3,7 @@ package it.pharmacywebassistant.services;
 import it.pharmacywebassistant.model.Address;
 import it.pharmacywebassistant.model.Company;
 import it.pharmacywebassistant.model.Cosmetic;
-import it.pharmacywebassistant.service.CosmeticService;
+import it.pharmacywebassistant.service.ProductService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public final class TestCosmetics {
 
     @Autowired
-    private CosmeticService service;
+    private ProductService service;
     private Cosmetic cosmetic;
     private Company company;
     private Address address;
