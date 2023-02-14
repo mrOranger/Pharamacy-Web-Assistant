@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serial;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@Entity(name = "Doctor") @Getter @Setter @AllArgsConstructor
+@Entity(name = "Doctor") @Getter @Setter @NoArgsConstructor
 public final class Doctor extends Person implements Serializable {
 
     @Serial
@@ -21,10 +22,9 @@ public final class Doctor extends Person implements Serializable {
 
     @OneToMany(mappedBy = "doctor")
     @JsonManagedReference
-    private List<Prescription> prescriptionList;
+    private List<Prescription> prescriptionList = new ArrayList<>();
 
     public Doctor(String taxCode, String firstName, String lastName, Date dateOfBirth) {
         super(taxCode, firstName, lastName, dateOfBirth);
-        this.prescriptionList = new ArrayList<>();
     }
 }

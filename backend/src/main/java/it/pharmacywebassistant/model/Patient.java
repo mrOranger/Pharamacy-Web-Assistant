@@ -20,10 +20,9 @@ public final class Patient extends Person implements Serializable {
 
     @OneToMany(mappedBy = "patient")
     @JsonManagedReference
-    private List<Prescription> prescriptionList;
+    private List<Prescription> prescriptionList = new ArrayList<>();;
 
     public Patient(String taxCode, String firstName, String lastName, Date dateOfBirth) {
         super(taxCode, firstName, lastName, dateOfBirth);
-        this.prescriptionList = new ArrayList<>();
     }
 }
