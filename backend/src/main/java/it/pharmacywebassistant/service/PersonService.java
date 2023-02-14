@@ -8,7 +8,9 @@ import java.util.Optional;
 
 public interface PersonService {
 
-    public abstract List<PersonDTO> findAll();
+    public abstract List<PersonDTO> findAllPatients();
+    public abstract List<PersonDTO> findAllDoctors();
+
     public abstract Optional<PersonDTO> findByTaxCode(String taxCode);
     public abstract PersonDTO save(Person person);
     public abstract void deleteAll();
