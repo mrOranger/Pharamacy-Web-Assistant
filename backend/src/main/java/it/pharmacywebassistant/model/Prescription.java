@@ -11,7 +11,7 @@ import lombok.Setter;
 import java.io.Serial;
 import java.io.Serializable;
 
-@Entity(name = "Person") @Table(name = "People")
+@Entity(name = "Prescription") @Table(name = "Prescriptions")
 @NoArgsConstructor @AllArgsConstructor
 @Getter @Setter
 public class Prescription implements Serializable {
