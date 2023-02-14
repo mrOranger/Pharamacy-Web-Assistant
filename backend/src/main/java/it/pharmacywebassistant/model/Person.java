@@ -21,7 +21,7 @@ public abstract class Person implements Serializable {
     @Serial
     private static final long serialVersionUID = -19820391810022L;
 
-    @Id @Column(name = "taxCode")
+    @Id @Column(name = "taxCode") @NotNull(message = "{Person.TaxCode.NotNull}")
     private String taxCode;
 
     @Column(name = "firstName")

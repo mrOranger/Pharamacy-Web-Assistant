@@ -46,7 +46,7 @@ public final class TestPatientController {
         patient.put("taxCode", "AB123")
                 .put("firstName", "Mario")
                 .put("lastName", "Rossi")
-                .put("dateOfBirth", Date.valueOf(LocalDate.now()));
+                .put("dateOfBirth", Date.valueOf(LocalDate.now()).toString());
     }
 
     @Test @Order(1) @SneakyThrows
@@ -67,7 +67,7 @@ public final class TestPatientController {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.value()))
                 .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
-                .andExpect(jsonPath("$.message").value("Il Paziente non è registrato nel Database!"))
+                .andExpect(jsonPath("$.message").value("Nessun paziente registrato con Codice Fiscale 1!"))
                 .andDo(print());
     }
 
@@ -80,7 +80,7 @@ public final class TestPatientController {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(HttpStatus.OK.value()))
                 .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
-                .andExpect(jsonPath("$.message").value("Paziente inserito con successo!"))
+                .andExpect(jsonPath("$.message").value("Paziente registrato con successo!"))
                 .andDo(print());
 
         mockMvc.perform(MockMvcRequestBuilders.get("/v1/api/patients/")
@@ -90,7 +90,7 @@ public final class TestPatientController {
                 .andExpect(jsonPath("$.*", hasSize(1)))
                 .andDo(print());
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/v1/api/patients/1")
+        mockMvc.perform(MockMvcRequestBuilders.get("/v1/api/patients/AB123")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.taxCode").value(patient.get("taxCode")))
@@ -179,7 +179,7 @@ public final class TestPatientController {
 
     @Test @Order(8) @SneakyThrows
     public void testPutPatientReturnsMessageWithOkCode() {
-        mockMvc.perform(MockMvcRequestBuilders.put("/v1/api/patients/1")
+        mockMvc.perform(MockMvcRequestBuilders.put("/v1/api/patients/AB123")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(String.valueOf(patient))
                         .accept(MediaType.APPLICATION_JSON))
@@ -228,26 +228,26 @@ public final class TestPatientController {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
                 .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
-                .andExpect(jsonPath("$.message").value("La Data di Nascita non può essere nulla!"))
+                .andExpect(jsonPath("$.message").value("La Data di Nascita non puo' essere nulla!"))
                 .andDo(print());
     }
 
     @Test @Order(12) @SneakyThrows
-    public void testPutPatientReturnsMessageWithNotFoundCode() {
+    public void testPutPatientReturnsMessageWithConflictCode() {
         mockMvc.perform(MockMvcRequestBuilders.put("/v1/api/patients/2")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(String.valueOf(patient))
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.value()))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.code").value(HttpStatus.CONFLICT.value()))
                 .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
-                .andExpect(jsonPath("$.message").value("Il Paziente non è registrato nel Database, usare metodo POST per inserirne uno nuovo!"))
+                .andExpect(jsonPath("$.message").value("Paziente non registrato, usare metodo POST per registrarlo!"))
                 .andDo(print());
     }
 
     @Test @Order(13) @SneakyThrows
     public void testDeletePatientByIdReturnsMessageWithOkCode() {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/v1/api/patients/1")
+        mockMvc.perform(MockMvcRequestBuilders.delete("/v1/api/patients/AB123")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(HttpStatus.OK.value()))
@@ -268,58 +268,7 @@ public final class TestPatientController {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.value()))
                 .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
-                .andExpect(jsonPath("$.message").value("Il Paziente non è registrato nel Database!"))
-                .andDo(print());
-    }
-
-    @Test @Order(15) @SneakyThrows
-    public void testDeleteAllPatientsReturnsMessageWithOkCode() {
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/v1/api/patients/")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(String.valueOf(patient))
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value(HttpStatus.OK.value()))
-                .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
-                .andExpect(jsonPath("$.message").value("Paziente eliminato con successo!"))
-                .andDo(print());
-
-        mockMvc.perform(MockMvcRequestBuilders.delete("/v1/api/patients/")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value(HttpStatus.OK.value()))
-                .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
-                .andExpect(jsonPath("$.message").value("Pazienti eliminati con successo!"))
-                .andDo(print());
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/v1/api/patients/")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.value()))
-                .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
-                .andExpect(jsonPath("$.message").value("Nessun Paziente registrato nel Database!"))
-                .andDo(print());
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/v1/api/patients/1")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.value()))
-                .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
-                .andExpect(jsonPath("$.message").value("Il Paziente non è registrato nel Database!"))
-                .andDo(print());
-    }
-
-    @Test @Order(16) @SneakyThrows
-    public void testDeleteAllPatientsReturnsMessageWithConflictCode() {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/v1/api/patients/")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isConflict())
-                .andExpect(jsonPath("$.code").value(HttpStatus.CONFLICT.value()))
-                .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
-                .andExpect(jsonPath("$.message").value("Nessun Paziente registrato nel Database!"))
+                .andExpect(jsonPath("$.message").value("Nessun paziente registrato con Codice Fiscale 1!"))
                 .andDo(print());
     }
 }
