@@ -8,6 +8,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import it.pharmacywebassistant.controller.exception.BadRequestException;
+import it.pharmacywebassistant.controller.exception.ConflictException;
 import it.pharmacywebassistant.controller.exception.NotFoundException;
 import it.pharmacywebassistant.controller.message.Message;
 import it.pharmacywebassistant.model.Doctor;
@@ -15,16 +17,20 @@ import it.pharmacywebassistant.model.Patient;
 import it.pharmacywebassistant.model.Prescription;
 import it.pharmacywebassistant.model.dto.PatientDTO;
 import it.pharmacywebassistant.model.dto.PrescriptionDTO;
+import it.pharmacywebassistant.model.dto.ProductDTO;
 import it.pharmacywebassistant.service.PrescriptionService;
 import jakarta.validation.Valid;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -136,9 +142,17 @@ public final class PrescriptionController {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = Message.class))
             })
     })
-    @PostMapping(path = "/", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/", consumes = MediaType.APPLICATION_JSON_VALUE) @SneakyThrows
     public ResponseEntity<Message> postPrescription(@Parameter(description = "Nuova Prescrizione Medica da inserire nel Database, in formato valido.") @Valid @RequestBody Prescription prescription, BindingResult bindingResult) {
-        return null;
+        if(bindingResult.hasErrors()) {
+            throw new BadRequestException(resourceBundleMessageSource.getMessage(bindingResult.getFieldError(), LocaleContextHolder.getLocale()));
+        }
+        final Optional<PrescriptionDTO> prescriptionDTO = service.findById(prescription.getId());
+        if(prescriptionDTO.isPresent()) {
+            throw new ConflictException("La Prescrizione Medica è già registrata, usare metodo PUT per modificarla");
+        }
+        service.save(prescription);
+        return ResponseEntity.ok(new Message(LocalDate.now(), HttpStatus.OK.value(), "Prescrizione registrata correttamente nel Database!"));
     }
 
     @Operation(summary = "PUT Prescrizione Medica", description = "Modifica una Prescrizione Medica già registrata nel Database.")
