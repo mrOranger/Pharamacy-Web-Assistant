@@ -8,13 +8,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import it.pharmacywebassistant.controller.exception.NotFoundException;
 import it.pharmacywebassistant.controller.message.Message;
 import it.pharmacywebassistant.model.Doctor;
 import it.pharmacywebassistant.model.Patient;
 import it.pharmacywebassistant.model.Prescription;
+import it.pharmacywebassistant.model.dto.PatientDTO;
 import it.pharmacywebassistant.model.dto.PrescriptionDTO;
 import it.pharmacywebassistant.service.PrescriptionService;
 import jakarta.validation.Valid;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.http.MediaType;
@@ -46,9 +49,13 @@ public final class PrescriptionController {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = Message.class))
             })
     })
-    @GetMapping(path = "/")
+    @GetMapping(path = "/") @SneakyThrows
     public ResponseEntity<List<PrescriptionDTO>> getAllPrescriptions() {
-        return null;
+        final List<PrescriptionDTO> prescriptionDTOList = service.findAll();
+        if(prescriptionDTOList.isEmpty()) {
+            throw new NotFoundException("Nessuna Prescrizione Medica correttamente registrata nel Database!");
+        }
+        return ResponseEntity.ok(prescriptionDTOList);
     }
 
     @Operation(summary = "GET Prescrizioni di un Paziente", description = "Restituisce tutte le Prescrizioni Mediche registrate all'interno del Database, " +
@@ -64,9 +71,13 @@ public final class PrescriptionController {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = Message.class))
             })
     })
-    @GetMapping(path = "/patient/{taxCode}")
+    @GetMapping(path = "/patient/{taxCode}") @SneakyThrows
     public ResponseEntity<List<PrescriptionDTO>> getAllPrescriptionsByPatientTaxCode(@Parameter(description = "Codice Fiscale del Paziente di cui si vogliono ricercare le prescrizioni") @PathVariable String taxCode) {
-        return null;
+        final List<PrescriptionDTO> prescriptionDTOList = service.findAllByPatientTaxCode(taxCode);
+        if(prescriptionDTOList.isEmpty()) {
+            throw new NotFoundException("Nessuna Prescrizione Medica, per il Paziente " + taxCode + " correttamente registrata nel Database!");
+        }
+        return ResponseEntity.ok(prescriptionDTOList);
     }
 
     @Operation(summary = "GET Prescrizioni di un Dottore", description = "Restituisce tutte le Prescrizioni Mediche registrate all'interno del Database, " +
