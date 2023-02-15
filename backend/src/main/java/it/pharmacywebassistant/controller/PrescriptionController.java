@@ -26,6 +26,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "v1/api/prescriptions/", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -114,9 +115,13 @@ public final class PrescriptionController {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = Message.class))
             })
     })
-    @GetMapping(path = "/{id}")
+    @GetMapping(path = "/{id}") @SneakyThrows
     public ResponseEntity<PrescriptionDTO> getPrescriptionById(@Parameter(description = "ID della Prescrizione Medica che si vuole ricercare") @PathVariable Long id) {
-        return null;
+        final Optional<PrescriptionDTO> prescriptionDTO = service.findById(id);
+        if(prescriptionDTO.isEmpty()) {
+            throw new NotFoundException("Nessuna Prescrizione Medica con ID " + id + " registrata nel Database!");
+        }
+        return ResponseEntity.ok(prescriptionDTO.get());
     }
 
     @Operation(summary = "POST nuova Prescrizione Medica", description = "Inserisce una nuova Prescizione Medica, se questa è valida, all'interno del Database")
