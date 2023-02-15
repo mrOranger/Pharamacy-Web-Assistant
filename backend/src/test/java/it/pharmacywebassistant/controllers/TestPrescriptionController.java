@@ -53,7 +53,7 @@ public final class TestPrescriptionController {
                 .put("dateOfBirth", Date.valueOf(LocalDate.now()).toString());
 
         doctor = new JSONObject();
-        patient.put("taxCode", "LO123")
+        doctor.put("taxCode", "LO123")
                 .put("firstName", "Federico")
                 .put("lastName", "Verdi")
                 .put("dateOfBirth", Date.valueOf(LocalDate.now()).toString());
@@ -154,7 +154,7 @@ public final class TestPrescriptionController {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
                 .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
-                .andExpect(jsonPath("$.message").value("Il formato della Prescrizione Medica non è valido!"))
+                .andExpect(jsonPath("$.message").value("Il Dottore della Prescrizione non puo' essere nullo"))
                 .andDo(print());
 
         prescription.put("doctor", doctor);
