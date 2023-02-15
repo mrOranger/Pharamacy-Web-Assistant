@@ -19,7 +19,7 @@ public final class Patient extends Person implements Serializable {
     private static final long serialVersionUID = -18274019284732L;
 
     @OneToMany(mappedBy = "patient")
-    @JsonManagedReference
+    @JsonManagedReference(value = "patient")
     private List<Prescription> prescriptionList = new ArrayList<>();;
 
     public Patient(String taxCode, String firstName, String lastName, Date dateOfBirth) {

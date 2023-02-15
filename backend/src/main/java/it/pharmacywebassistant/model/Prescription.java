@@ -25,13 +25,13 @@ public class Prescription implements Serializable {
     @NotNull(message = "{Prescription.Patient.NotNull}")
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "Patient", nullable = false)
-    @JsonBackReference
+    @JsonBackReference(value = "patient")
     private Patient patient;
 
     @NotNull(message = "{Prescription.Doctor.NotNull}")
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "Doctor", nullable = false)
-    @JsonBackReference
+    @JsonBackReference(value = "doctor")
     private Doctor doctor;
 
 }
