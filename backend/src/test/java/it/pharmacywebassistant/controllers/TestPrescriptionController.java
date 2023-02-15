@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public final class TestPrescriptionController {
 
     @Autowired
-    private static WebApplicationContext context;
+    private WebApplicationContext context;
 
     @Autowired
     private PrescriptionService service;
