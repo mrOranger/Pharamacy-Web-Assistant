@@ -27,6 +27,16 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     }
 
     @Override
+    public List<PrescriptionDTO> findAllByPatientTaxCode(String taxCode) {
+        return convertToDto(repository.findByPatientTaxCode(taxCode));
+    }
+
+    @Override
+    public List<PrescriptionDTO> findAllByDoctorTaxCode(String taxCode) {
+        return convertToDto(repository.findByDoctorTaxCode(taxCode));
+    }
+
+    @Override
     public Optional<PrescriptionDTO> findById(Long id) {
         return convertToDto(repository.findById(id));
     }
