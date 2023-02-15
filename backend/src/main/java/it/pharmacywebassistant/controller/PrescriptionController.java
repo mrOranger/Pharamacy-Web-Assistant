@@ -93,9 +93,13 @@ public final class PrescriptionController {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = Message.class))
             })
     })
-    @GetMapping(path = "/doctor/{taxCode}")
+    @GetMapping(path = "/doctor/{taxCode}") @SneakyThrows
     public ResponseEntity<List<PrescriptionDTO>> getAllPrescriptionsByDoctorTaxCode(@Parameter(description = "Codice Fiscale del Dottore di cui si vogliono ricercare le prescrizioni") @PathVariable String taxCode) {
-        return null;
+        final List<PrescriptionDTO> prescriptionDTOList = service.findAllByDoctorTaxCode(taxCode);
+        if(prescriptionDTOList.isEmpty()) {
+            throw new NotFoundException("Nessuna Prescrizione Medica, per il Dottore " + taxCode + " correttamente registrata nel Database!");
+        }
+        return ResponseEntity.ok(prescriptionDTOList);
     }
 
     @Operation(summary = "GET Prescrizione", description = "Restituisce una Prescrizione Medica, identificata dall'id passato come parametro, " +
