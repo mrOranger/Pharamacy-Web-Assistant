@@ -262,7 +262,7 @@ public final class TestPrescriptionController {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
                 .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
-                .andExpect(jsonPath("$.message").value("Il formato della Prescrizione Medica non è valido!"))
+                .andExpect(jsonPath("$.message").value("Il Dottore della Prescrizione non puo' essere nullo"))
                 .andDo(print());
 
         prescription.put("doctor", doctor);
@@ -292,7 +292,7 @@ public final class TestPrescriptionController {
     @Test @Order(10) @SneakyThrows
     public void testPutPrescriptionReturnsMessageWithStatusCodeNotFound() {
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/v1/api/prescriptions/2")
+        mockMvc.perform(MockMvcRequestBuilders.put("/v1/api/prescriptions/10")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(String.valueOf(prescription))
                         .accept(MediaType.APPLICATION_JSON))
