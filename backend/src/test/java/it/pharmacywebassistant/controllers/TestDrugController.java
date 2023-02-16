@@ -1,7 +1,7 @@
 package it.pharmacywebassistant.controllers;
 
 import it.pharmacywebassistant.PharmacyWebAssistantApplication;
-import it.pharmacywebassistant.service.DrugService;
+import it.pharmacywebassistant.service.ProductService;
 import lombok.SneakyThrows;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
@@ -32,7 +32,7 @@ public final class TestDrugController {
     private WebApplicationContext context;
 
     @Autowired
-    private DrugService service;
+    private ProductService service;
 
     private MockMvc mockMvc;
     private JSONObject drug;
@@ -63,7 +63,7 @@ public final class TestDrugController {
 
     @Test @Order(1) @SneakyThrows
     public void testGetAllProductsReturnsMessageWithNotFoundCode() {
-        mockMvc.perform(MockMvcRequestBuilders.get("/v1/api/products/drugs/")
+        mockMvc.perform(MockMvcRequestBuilders.get("/v1/api/products/")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.value()))
@@ -74,7 +74,7 @@ public final class TestDrugController {
 
     @Test @Order(2) @SneakyThrows
     public void testGetProductByIdReturnsMessageWithNotFoundCode() {
-        mockMvc.perform(MockMvcRequestBuilders.get("/v1/api/products/drugs/1")
+        mockMvc.perform(MockMvcRequestBuilders.get("/v1/api/products/1")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.value()))
@@ -92,7 +92,7 @@ public final class TestDrugController {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(HttpStatus.OK.value()))
                 .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
-                .andExpect(jsonPath("$.message").value("Prodotto inserito con successo!"))
+                .andExpect(jsonPath("$.message").value("Medicina inserita con successo!"))
                 .andDo(print());
     }
 
@@ -132,7 +132,7 @@ public final class TestDrugController {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(HttpStatus.OK.value()))
                 .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
-                .andExpect(jsonPath("$.message").value("Prodotto modificato con successo!"))
+                .andExpect(jsonPath("$.message").value("Medicina modificata con successo!"))
                 .andDo(print());
     }
 
@@ -164,7 +164,7 @@ public final class TestDrugController {
 
     @Test @Order(9) @SneakyThrows
     public void testGetAllProductsReturnsMessageWithOkayCodeAndCollectionOfSizeOne() {
-        mockMvc.perform(MockMvcRequestBuilders.get("/v1/api/products/drugs/")
+        mockMvc.perform(MockMvcRequestBuilders.get("/v1/api/products/")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*", isA(List.class)))
@@ -175,7 +175,7 @@ public final class TestDrugController {
 
     @Test @Order(10) @SneakyThrows
     public void testRemoveProductWithId1ReturnsMessageWithOkCode() {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/v1/api/products/drugs/1")
+        mockMvc.perform(MockMvcRequestBuilders.delete("/v1/api/products/1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(HttpStatus.OK.value()))
@@ -186,7 +186,7 @@ public final class TestDrugController {
 
     @Test @Order(11) @SneakyThrows
     public void testGetAllProductsReturnsAgainMessageWithNotFoundCode() {
-        mockMvc.perform(MockMvcRequestBuilders.get("/v1/api/products/drugs/")
+        mockMvc.perform(MockMvcRequestBuilders.get("/v1/api/products/")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.value()))
@@ -197,7 +197,7 @@ public final class TestDrugController {
 
     @Test @Order(12) @SneakyThrows
     public void testRemoveProductWithId1ReturnsMessageWithConflictCode() {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/v1/api/products/drugs/1")
+        mockMvc.perform(MockMvcRequestBuilders.delete("/v1/api/products/1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.code").value(HttpStatus.CONFLICT.value()))
@@ -208,7 +208,7 @@ public final class TestDrugController {
 
     @Test @Order(13) @SneakyThrows
     public void testRemoveAllProductsReturnsMessageWithConflictCode() {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/v1/api/products/drugs/")
+        mockMvc.perform(MockMvcRequestBuilders.delete("/v1/api/products/")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.code").value(HttpStatus.CONFLICT.value()))

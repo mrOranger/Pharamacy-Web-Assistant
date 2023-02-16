@@ -3,7 +3,7 @@ package it.pharmacywebassistant.services;
 import it.pharmacywebassistant.model.Address;
 import it.pharmacywebassistant.model.Company;
 import it.pharmacywebassistant.model.Cosmetic;
-import it.pharmacywebassistant.service.CosmeticService;
+import it.pharmacywebassistant.service.ProductService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,21 +11,21 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public final class TestCosmetics {
+public final class TestCosmeticService {
 
     @Autowired
-    private CosmeticService service;
+    private ProductService service;
     private Cosmetic cosmetic;
     private Company company;
     private Address address;
 
     @BeforeEach
     public void beforeEach() {
-        this.address = new Address("Prova", 2l, "Prova", "Prova");
+        this.address = new Address("Prova", 2L, "Prova", "Prova");
         this.company = new Company("Prova", this.address);
         this.cosmetic = new Cosmetic("Prova", "Prova", 1000.00, "Prova");
         this.cosmetic.setCompany(this.company);
-        this.cosmetic.setId(1l);
+        this.cosmetic.setId(1L);
     }
 
     @Test @Order(1)
@@ -54,7 +54,7 @@ public final class TestCosmetics {
     @Test @Order(5)
     public void testDeleteAnExistingCosmeticReturnsACollectionOfSizeOne() {
         service.deleteById(this.cosmetic.getId());
-        assertThat(service.findById(this.cosmetic.getId()).isEmpty());
+        assertThat(service.findById(this.cosmetic.getId()).isEmpty()).isEqualTo(true);
     }
 
     @Test @Order(6)
