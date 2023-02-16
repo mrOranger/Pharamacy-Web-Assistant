@@ -1,7 +1,6 @@
 package it.pharmacywebassistant.controllers;
 
 import it.pharmacywebassistant.PharmacyWebAssistantApplication;
-import it.pharmacywebassistant.service.ProductService;
 import lombok.SneakyThrows;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
@@ -31,8 +30,6 @@ public final class TestCosmeticController {
     @Autowired
     private WebApplicationContext context;
 
-    @Autowired
-    private ProductService service;
 
     private MockMvc mockMvc;
     private JSONObject cosmetic;

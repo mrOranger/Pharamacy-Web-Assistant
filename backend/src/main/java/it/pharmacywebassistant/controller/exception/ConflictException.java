@@ -7,7 +7,8 @@ import lombok.Setter;
 public class ConflictException extends Exception{
 
 
-    private String message;
+    private static final long serialVersionUID = -8692501059461597707L;
+	private String message;
 
     public ConflictException() {
         this.message = "Elemento già presente all'interno del database!";

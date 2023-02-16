@@ -1,4 +1,15 @@
 package it.pharmacywebassistant.model.dto;
-public record PrescriptionDTO (Long id, PatientDTO patient, DoctorDTO doctor) {
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor
+public class PrescriptionDTO {
+	
+	private Long id;
+	private PatientDTO patient;
+	private DoctorDTO doctor;
 
 }

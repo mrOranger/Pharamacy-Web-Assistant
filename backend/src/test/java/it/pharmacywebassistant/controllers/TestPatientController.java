@@ -1,7 +1,6 @@
 package it.pharmacywebassistant.controllers;
 
 import it.pharmacywebassistant.PharmacyWebAssistantApplication;
-import it.pharmacywebassistant.service.PersonService;
 import lombok.SneakyThrows;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
@@ -30,9 +29,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public final class TestPatientController {
     @Autowired
     private WebApplicationContext context;
-
-    @Autowired
-    private PersonService service;
 
     private MockMvc mockMvc;
     private JSONObject patient;

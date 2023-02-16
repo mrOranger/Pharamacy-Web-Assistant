@@ -14,14 +14,14 @@ import java.util.Locale;
 public class MessageConfiguration {
 
     @Bean(name = "validator")
-    public LocalValidatorFactoryBean validator() {
+    LocalValidatorFactoryBean validator() {
         LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
         bean.setValidationMessageSource(messageSource());
         return bean;
     }
 
     @Bean
-    public MessageSource messageSource() {
+    MessageSource messageSource() {
         ResourceBundleMessageSource resource = new ResourceBundleMessageSource();
         resource.setBasename("messages");
         resource.setUseCodeAsDefaultMessage(true);
@@ -29,7 +29,7 @@ public class MessageConfiguration {
     }
 
     @Bean
-    public LocaleResolver localeResolver(){
+    LocaleResolver localeResolver(){
         SessionLocaleResolver sessionLocaleResolver = new SessionLocaleResolver();
         sessionLocaleResolver.setDefaultLocale(new Locale("it"));
         return sessionLocaleResolver;

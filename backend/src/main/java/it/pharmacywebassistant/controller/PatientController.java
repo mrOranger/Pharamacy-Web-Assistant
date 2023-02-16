@@ -15,7 +15,6 @@ import it.pharmacywebassistant.controller.message.Message;
 import it.pharmacywebassistant.model.Patient;
 import it.pharmacywebassistant.model.dto.PatientDTO;
 import it.pharmacywebassistant.model.dto.PersonDTO;
-import it.pharmacywebassistant.model.dto.ProductDTO;
 import it.pharmacywebassistant.service.PersonService;
 import jakarta.validation.Valid;
 import lombok.SneakyThrows;

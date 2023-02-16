@@ -45,54 +45,54 @@ public final class TestPrescriptionService {
     @Test @Order(3)
     public void testAddNewPrescription() {
         final PrescriptionDTO savedPrescription = service.save(prescription);
-        assertThat(savedPrescription.id()).isEqualTo(prescription.getId());
-        assertThat(savedPrescription.doctor().getTaxCode()).isEqualTo(prescription.getDoctor().getTaxCode());
-        assertThat(savedPrescription.patient().getTaxCode()).isEqualTo(prescription.getPatient().getTaxCode());
+        assertThat(savedPrescription.getId()).isEqualTo(prescription.getId());
+        assertThat(savedPrescription.getDoctor().getTaxCode()).isEqualTo(prescription.getDoctor().getTaxCode());
+        assertThat(savedPrescription.getPatient().getTaxCode()).isEqualTo(prescription.getPatient().getTaxCode());
 
         assertThat(service.findAll().size()).isEqualTo(1);
-        assertThat(service.findAll().get(0).patient().getTaxCode()).isEqualTo(prescription.getPatient().getTaxCode());
-        assertThat(service.findAll().get(0).doctor().getTaxCode()).isEqualTo(prescription.getDoctor().getTaxCode());
+        assertThat(service.findAll().get(0).getPatient().getTaxCode()).isEqualTo(prescription.getPatient().getTaxCode());
+        assertThat(service.findAll().get(0).getDoctor().getTaxCode()).isEqualTo(prescription.getDoctor().getTaxCode());
 
-        assertThat(service.findById(savedPrescription.id()).isPresent()).isEqualTo(true);
-        assertThat(service.findById(savedPrescription.id()).get().patient().getTaxCode()).isEqualTo(prescription.getPatient().getTaxCode());
-        assertThat(service.findById(savedPrescription.id()).get().doctor().getTaxCode()).isEqualTo(prescription.getDoctor().getTaxCode());
+        assertThat(service.findById(savedPrescription.getId()).isPresent()).isEqualTo(true);
+        assertThat(service.findById(savedPrescription.getId()).get().getPatient().getTaxCode()).isEqualTo(prescription.getPatient().getTaxCode());
+        assertThat(service.findById(savedPrescription.getId()).get().getDoctor().getTaxCode()).isEqualTo(prescription.getDoctor().getTaxCode());
 
     }
 
     @Test @Order(4)
-    public void testUpdatePrescriptionDoctor() {
+    public void testUpdatePrescriptiongetDoctor() {
 
         prescription.setDoctor(new Doctor("OL091", "Federico", "Verdi", Date.valueOf(LocalDate.now())));
 
         PrescriptionDTO savedPrescription = service.save(prescription);
-        assertThat(savedPrescription.doctor().getTaxCode()).isEqualTo(prescription.getDoctor().getTaxCode());
-        assertThat(savedPrescription.patient().getTaxCode()).isEqualTo(prescription.getPatient().getTaxCode());
+        assertThat(savedPrescription.getDoctor().getTaxCode()).isEqualTo(prescription.getDoctor().getTaxCode());
+        assertThat(savedPrescription.getPatient().getTaxCode()).isEqualTo(prescription.getPatient().getTaxCode());
 
         assertThat(service.findAll().size()).isEqualTo(1);
-        assertThat(service.findAll().get(0).patient().getTaxCode()).isEqualTo(prescription.getPatient().getTaxCode());
-        assertThat(service.findAll().get(0).doctor().getTaxCode()).isEqualTo(prescription.getDoctor().getTaxCode());
+        assertThat(service.findAll().get(0).getPatient().getTaxCode()).isEqualTo(prescription.getPatient().getTaxCode());
+        assertThat(service.findAll().get(0).getDoctor().getTaxCode()).isEqualTo(prescription.getDoctor().getTaxCode());
 
-        assertThat(service.findById(savedPrescription.id()).isPresent()).isEqualTo(true);
-        assertThat(service.findById(savedPrescription.id()).get().patient().getTaxCode()).isEqualTo(prescription.getPatient().getTaxCode());
-        assertThat(service.findById(savedPrescription.id()).get().doctor().getTaxCode()).isEqualTo(prescription.getDoctor().getTaxCode());
+        assertThat(service.findById(savedPrescription.getId()).isPresent()).isEqualTo(true);
+        assertThat(service.findById(savedPrescription.getId()).get().getPatient().getTaxCode()).isEqualTo(prescription.getPatient().getTaxCode());
+        assertThat(service.findById(savedPrescription.getId()).get().getDoctor().getTaxCode()).isEqualTo(prescription.getDoctor().getTaxCode());
 
     }
 
     @Test @Order(5)
-    public void testUpdatePrescriptionPatient() {
+    public void testUpdatePrescriptiongetPatient() {
         prescription.setPatient(new Patient("PP091", "Mario", "Rossi", Date.valueOf(LocalDate.now())));
 
         PrescriptionDTO savedPrescription = service.save(prescription);
-        assertThat(savedPrescription.doctor().getTaxCode()).isEqualTo(prescription.getDoctor().getTaxCode());
-        assertThat(savedPrescription.patient().getTaxCode()).isEqualTo(prescription.getPatient().getTaxCode());
+        assertThat(savedPrescription.getDoctor().getTaxCode()).isEqualTo(prescription.getDoctor().getTaxCode());
+        assertThat(savedPrescription.getPatient().getTaxCode()).isEqualTo(prescription.getPatient().getTaxCode());
 
         assertThat(service.findAll().size()).isEqualTo(1);
-        assertThat(service.findAll().get(0).patient().getTaxCode()).isEqualTo(prescription.getPatient().getTaxCode());
-        assertThat(service.findAll().get(0).doctor().getTaxCode()).isEqualTo(prescription.getDoctor().getTaxCode());
+        assertThat(service.findAll().get(0).getPatient().getTaxCode()).isEqualTo(prescription.getPatient().getTaxCode());
+        assertThat(service.findAll().get(0).getDoctor().getTaxCode()).isEqualTo(prescription.getDoctor().getTaxCode());
 
-        assertThat(service.findById(savedPrescription.id()).isPresent()).isEqualTo(true);
-        assertThat(service.findById(savedPrescription.id()).get().patient().getTaxCode()).isEqualTo(prescription.getPatient().getTaxCode());
-        assertThat(service.findById(savedPrescription.id()).get().doctor().getTaxCode()).isEqualTo(prescription.getDoctor().getTaxCode());
+        assertThat(service.findById(savedPrescription.getId()).isPresent()).isEqualTo(true);
+        assertThat(service.findById(savedPrescription.getId()).get().getPatient().getTaxCode()).isEqualTo(prescription.getPatient().getTaxCode());
+        assertThat(service.findById(savedPrescription.getId()).get().getDoctor().getTaxCode()).isEqualTo(prescription.getDoctor().getTaxCode());
     }
 
     @Test @Order(6)
@@ -108,21 +108,21 @@ public final class TestPrescriptionService {
     public void testDeleteAllPrescriptions() {
 
         final PrescriptionDTO savedPrescription = service.save(prescription);
-        assertThat(savedPrescription.doctor().getTaxCode()).isEqualTo(prescription.getDoctor().getTaxCode());
-        assertThat(savedPrescription.patient().getTaxCode()).isEqualTo(prescription.getPatient().getTaxCode());
+        assertThat(savedPrescription.getDoctor().getTaxCode()).isEqualTo(prescription.getDoctor().getTaxCode());
+        assertThat(savedPrescription.getPatient().getTaxCode()).isEqualTo(prescription.getPatient().getTaxCode());
 
         assertThat(service.findAll().size()).isEqualTo(1);
-        assertThat(service.findAll().get(0).patient().getTaxCode()).isEqualTo(prescription.getPatient().getTaxCode());
-        assertThat(service.findAll().get(0).doctor().getTaxCode()).isEqualTo(prescription.getDoctor().getTaxCode());
+        assertThat(service.findAll().get(0).getPatient().getTaxCode()).isEqualTo(prescription.getPatient().getTaxCode());
+        assertThat(service.findAll().get(0).getDoctor().getTaxCode()).isEqualTo(prescription.getDoctor().getTaxCode());
 
-        assertThat(service.findById(savedPrescription.id()).isPresent()).isEqualTo(true);
-        assertThat(service.findById(savedPrescription.id()).get().patient().getTaxCode()).isEqualTo(prescription.getPatient().getTaxCode());
-        assertThat(service.findById(savedPrescription.id()).get().doctor().getTaxCode()).isEqualTo(prescription.getDoctor().getTaxCode());
+        assertThat(service.findById(savedPrescription.getId()).isPresent()).isEqualTo(true);
+        assertThat(service.findById(savedPrescription.getId()).get().getPatient().getTaxCode()).isEqualTo(prescription.getPatient().getTaxCode());
+        assertThat(service.findById(savedPrescription.getId()).get().getDoctor().getTaxCode()).isEqualTo(prescription.getDoctor().getTaxCode());
 
         service.deleteAll();
 
         assertThat(service.findAll().size()).isEqualTo(0);
-        assertThat(service.findById(savedPrescription.id()).isEmpty()).isEqualTo(true);
+        assertThat(service.findById(savedPrescription.getId()).isEmpty()).isEqualTo(true);
 
     }
 }

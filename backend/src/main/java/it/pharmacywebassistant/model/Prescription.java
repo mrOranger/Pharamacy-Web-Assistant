@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.io.Serial;
 import java.io.Serializable;
 
 @Entity(name = "Prescription") @Table(name = "Prescriptions")
@@ -16,7 +15,6 @@ import java.io.Serializable;
 @Getter @Setter
 public class Prescription implements Serializable {
 
-    @Serial
     private static final long serialVersionUID = -91029471829388L;
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO)

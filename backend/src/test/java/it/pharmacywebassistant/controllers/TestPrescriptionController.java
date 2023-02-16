@@ -1,7 +1,6 @@
 package it.pharmacywebassistant.controllers;
 
 import it.pharmacywebassistant.PharmacyWebAssistantApplication;
-import it.pharmacywebassistant.service.PrescriptionService;
 import lombok.SneakyThrows;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
@@ -32,9 +31,6 @@ public final class TestPrescriptionController {
 
     @Autowired
     private WebApplicationContext context;
-
-    @Autowired
-    private PrescriptionService service;
 
     private MockMvc mockMvc;
     private JSONObject prescription;
