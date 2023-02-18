@@ -1,6 +1,7 @@
 package it.pharmacywebassistant.service.implementation;
 
 import it.pharmacywebassistant.mapper.PrescriptionMapper;
+import it.pharmacywebassistant.model.Doctor;
 import it.pharmacywebassistant.model.Patient;
 import it.pharmacywebassistant.model.Prescription;
 import it.pharmacywebassistant.model.dto.PrescriptionDTO;
@@ -51,6 +52,13 @@ public class PrescriptionServiceImpl implements PrescriptionService {
 	public PrescriptionDTO savePatient(Long id, Patient patient) {
 		Prescription prescription = repository.findById(id).get();
 		prescription.setPatient(patient);
+        return convertToDto(repository.save(prescription));
+	}
+	
+	@Override @Transactional
+	public PrescriptionDTO saveDoctor(Long id, Doctor doctor) {
+		Prescription prescription = repository.findById(id).get();
+		prescription.setDoctor(doctor);
         return convertToDto(repository.save(prescription));
 	}
 

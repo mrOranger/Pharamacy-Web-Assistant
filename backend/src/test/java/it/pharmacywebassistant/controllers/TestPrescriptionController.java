@@ -399,7 +399,7 @@ public final class TestPrescriptionController {
     	
         mockMvc.perform(MockMvcRequestBuilders.put("/v1/api/prescriptions/10/patient/")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(String.valueOf(prescription))
+                        .content(String.valueOf(patient))
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.value()))
@@ -432,14 +432,14 @@ public final class TestPrescriptionController {
     @Test @Order(14) @SneakyThrows
     public void testPutDoctorOfAPrescriptionReturnsMessageWithStatusCodeOk() {
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/v1/api/prescriptions/1/doctor")
+        mockMvc.perform(MockMvcRequestBuilders.put("/v1/api/prescriptions/1/doctor/")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(String.valueOf(doctor))
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(HttpStatus.OK.value()))
                 .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
-                .andExpect(jsonPath("$.message").value("Dottore della Prescrizione modificata correttamente nel Database!"))
+                .andExpect(jsonPath("$.message").value("Prescrizione modificata correttamente nel Database!"))
                 .andDo(print());
 
         mockMvc.perform(MockMvcRequestBuilders.get("/v1/api/prescriptions/")
@@ -469,14 +469,14 @@ public final class TestPrescriptionController {
 
         doctor.remove("firstName");
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/v1/api/prescriptions/1/doctor")
+        mockMvc.perform(MockMvcRequestBuilders.put("/v1/api/prescriptions/1/doctor/")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(String.valueOf(doctor))
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
                 .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
-                .andExpect(jsonPath("$.message").value("Il formato del Dottore della Prescrizione Medica non è valido!"))
+                .andExpect(jsonPath("$.message").value("Il Nome non può essere nullo!"))
                 .andDo(print());
 
         doctor.put("firstName", "Federico");
@@ -505,7 +505,7 @@ public final class TestPrescriptionController {
 
     @Test @Order(16) @SneakyThrows
     public void testPutDoctorOfAPrescriptionReturnsMessageWithStatusCodeNotFound() {
-        mockMvc.perform(MockMvcRequestBuilders.put("/v1/api/prescriptions/1/doctor")
+        mockMvc.perform(MockMvcRequestBuilders.put("/v1/api/prescriptions/10/doctor/")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(String.valueOf(doctor))
                         .accept(MediaType.APPLICATION_JSON))
