@@ -323,14 +323,14 @@ public final class TestPrescriptionController {
 
     @Test @Order(11) @SneakyThrows
     public void testPutPatientOfAPrescriptionReturnsMessageWithStatusCodeOk() {
-        mockMvc.perform(MockMvcRequestBuilders.put("/v1/api/prescriptions/1/patient")
+        mockMvc.perform(MockMvcRequestBuilders.put("/v1/api/prescriptions/1/patient/")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(String.valueOf(patient))
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(HttpStatus.OK.value()))
                 .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
-                .andExpect(jsonPath("$.message").value("Paziente della Prescrizione modificata correttamente nel Database!"))
+                .andExpect(jsonPath("$.message").value("Prescrizione modificata correttamente nel Database!"))
                 .andDo(print());
 
         mockMvc.perform(MockMvcRequestBuilders.get("/v1/api/prescriptions/")
@@ -360,14 +360,14 @@ public final class TestPrescriptionController {
 
         patient.remove("firstName");
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/v1/api/prescriptions/1/patient")
+        mockMvc.perform(MockMvcRequestBuilders.put("/v1/api/prescriptions/1/patient/")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(String.valueOf(patient))
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
                 .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
-                .andExpect(jsonPath("$.message").value("Il formato del Paziente della Prescrizione Medica non è valido!"))
+                .andExpect(jsonPath("$.message").value("Il Nome non può essere nullo!"))
                 .andDo(print());
 
         patient.put("firstName", "Mario");
@@ -396,7 +396,8 @@ public final class TestPrescriptionController {
 
     @Test @Order(13) @SneakyThrows
     public void testPutPatientOfAPrescriptionReturnsMessageWithStatusCodeNotFound() {
-        mockMvc.perform(MockMvcRequestBuilders.put("/v1/api/prescriptions/1/patient")
+    	
+        mockMvc.perform(MockMvcRequestBuilders.put("/v1/api/prescriptions/10/patient/")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(String.valueOf(prescription))
                         .accept(MediaType.APPLICATION_JSON))

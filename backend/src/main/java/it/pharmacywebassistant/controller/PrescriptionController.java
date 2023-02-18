@@ -191,9 +191,9 @@ public final class PrescriptionController {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = Message.class))
             })
     })
-    @PutMapping(path = "/{id}/doctor/", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(path = "/{id}/doctor/", consumes = MediaType.APPLICATION_JSON_VALUE) @SneakyThrows
     public ResponseEntity<Message> putPrescriptionDoctor( @Parameter(description = "ID della Prescrizione Medica da modificare") @PathVariable Long id, @Parameter(description = "Dottore della Prescrizione Medica da modificare") @Valid @RequestBody Doctor doctor, BindingResult bindingResult) {
-        return null;
+    	return null;
     }
 
     @Operation(summary = "PUT Paziente di una Prescrizione Medica", description = "Modifica il Paziente di una Prescrizione Medica già registrata nel Database.")
@@ -208,9 +208,17 @@ public final class PrescriptionController {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = Message.class))
             })
     })
-    @PutMapping(path = "/{id}/patient/", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(path = "/{id}/patient/", consumes = MediaType.APPLICATION_JSON_VALUE) @SneakyThrows
     public ResponseEntity<Message> putPrescriptionPatient( @Parameter(description = "ID della Prescrizione Medica da modificare") @PathVariable Long id, @Parameter(description = "Paziente della Prescrizione Medica da modificare") @Valid @RequestBody Patient patient, BindingResult bindingResult) {
-        return null;
+        if(bindingResult.hasErrors()) {
+        	throw new BadRequestException(resourceBundleMessageSource.getMessage(bindingResult.getFieldError(), LocaleContextHolder.getLocale()));
+        }
+        final Optional<PrescriptionDTO> prescriptionDTO = service.findById(id);
+        if(prescriptionDTO.isEmpty()) {
+            throw new NotFoundException("La Prescrizione Medica non è registrata, usare metodo POST per inserirne una nuova");
+        }
+        service.savePatient(id, patient);
+        return ResponseEntity.ok(new Message(LocalDate.now(), HttpStatus.OK.value(), "Prescrizione modificata correttamente nel Database!"));
     }
 
     @Operation(summary = "DELETE Prescrizione Medica", description = "Elimina una Prescrizione Medica già registrata correttamente nel Database.")
