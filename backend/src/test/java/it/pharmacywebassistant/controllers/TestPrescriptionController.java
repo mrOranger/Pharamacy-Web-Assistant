@@ -571,7 +571,7 @@ public final class TestPrescriptionController {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.value()))
                 .andExpect(jsonPath("$.date").value(LocalDate.now().toString()))
-                .andExpect(jsonPath("$.message").value("Non è stata trovata alcuna Prescizione Medica con ID 1"))
+                .andExpect(jsonPath("$.message").value("Prescrizione Medica con ID 1 non registrata, impossibile eliminare!"))
                 .andDo(print());
 
         mockMvc.perform(MockMvcRequestBuilders.get("/v1/api/prescriptions/")

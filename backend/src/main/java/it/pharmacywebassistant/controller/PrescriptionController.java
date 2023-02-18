@@ -238,8 +238,13 @@ public final class PrescriptionController {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = Message.class))
             })
     })
-    @DeleteMapping(path = "/{id}")
+    @DeleteMapping(path = "/{id}") @SneakyThrows
     public ResponseEntity<Message> deletePrescriptionById( @Parameter(description = "ID della Prescrizione Medica da eliminare") @PathVariable Long id) {
-        return null;
+        Optional<PrescriptionDTO> prescription = service.findById(id);
+        if(prescription.isEmpty()) {
+        	throw new NotFoundException("Prescrizione Medica con ID " + id + " non registrata, impossibile eliminare!");
+        } 
+        service.deleteById(id);
+        return ResponseEntity.ok(new Message(LocalDate.now(), HttpStatus.OK.value(), "Prescrizione Medica eliminata correttamente dal Database!"));
     }
 }
