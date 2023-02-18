@@ -1,15 +1,22 @@
 package it.pharmacywebassistant.model.dto;
 
-import lombok.AllArgsConstructor;
+import java.util.Set;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor
+@Getter @Setter @NoArgsConstructor
 public class PrescriptionDTO {
 	
 	private Long id;
 	private PatientDTO patient;
 	private DoctorDTO doctor;
-
+	private Set<DrugDTO> drugs;
+	
+	public PrescriptionDTO(Long id, PatientDTO patient, DoctorDTO doctor) {
+		this.id = id;
+		this.patient = patient;
+		this.doctor = doctor;
+	}
 }

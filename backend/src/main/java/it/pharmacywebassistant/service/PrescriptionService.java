@@ -1,8 +1,10 @@
 package it.pharmacywebassistant.service;
 
 import it.pharmacywebassistant.model.Doctor;
+import it.pharmacywebassistant.model.Drug;
 import it.pharmacywebassistant.model.Patient;
 import it.pharmacywebassistant.model.Prescription;
+import it.pharmacywebassistant.model.dto.DrugDTO;
 import it.pharmacywebassistant.model.dto.PrescriptionDTO;
 
 import java.util.List;
@@ -20,5 +22,11 @@ public interface PrescriptionService {
     public abstract PrescriptionDTO saveDoctor(Long id, Doctor doctor);
     public abstract void deleteAll();
     public abstract void deleteById(Long id);
+    
+    public abstract List<DrugDTO> findAllDrugs(Long id);
+    public abstract Optional<DrugDTO> findByDrugId(Long prescriptionId, Long drugId);
+    public abstract Prescription save(Long prescriptionId, Drug drug);
+    public abstract void deleteAllDrugs(Long prescriptionId);
+    public abstract void deleteByDrugId(Long prescriptionId, Long drugId);
 
 }

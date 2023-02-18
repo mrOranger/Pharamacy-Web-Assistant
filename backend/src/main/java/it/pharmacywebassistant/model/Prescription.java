@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity(name = "Prescription") @Table(name = "Prescriptions")
 @NoArgsConstructor @AllArgsConstructor
@@ -31,5 +33,14 @@ public class Prescription implements Serializable {
     @JoinColumn(name = "Doctor", nullable = false)
     @JsonBackReference(value = "doctor")
     private Doctor doctor;
+    
+    @NotNull(message = "{Prescription.Drugs.NotNull}")
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "PRESCRIPTIONS_DRUGS",
+    		joinColumns = { @JoinColumn(name = "prescription_id") },
+    		inverseJoinColumns = { @JoinColumn(name = "drug_id") }
+    )
+    @JsonBackReference
+    private Set<Drug> drugs = new HashSet<>();
 
 }
