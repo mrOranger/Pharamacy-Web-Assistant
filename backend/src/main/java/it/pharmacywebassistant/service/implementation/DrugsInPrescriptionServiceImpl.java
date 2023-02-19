@@ -8,9 +8,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import it.pharmacywebassistant.mapper.DrugMapper;
+import it.pharmacywebassistant.mapper.PrescriptionMapper;
 import it.pharmacywebassistant.model.Drug;
 import it.pharmacywebassistant.model.Prescription;
 import it.pharmacywebassistant.model.dto.DrugDTO;
+import it.pharmacywebassistant.model.dto.PrescriptionDTO;
 import it.pharmacywebassistant.repository.PrescriptionRepository;
 import it.pharmacywebassistant.service.DrugsInPrescriptionService;
 
@@ -22,6 +24,9 @@ public class DrugsInPrescriptionServiceImpl implements DrugsInPrescriptionServic
 	
 	@Autowired 
 	private DrugMapper mapper;
+	
+	@Autowired
+	private PrescriptionMapper prescriptionMapper;
 	
 
 	@Override
@@ -46,13 +51,13 @@ public class DrugsInPrescriptionServiceImpl implements DrugsInPrescriptionServic
 	}
 
 	@Override @Transactional
-	public Prescription save(Long prescriptionId, Drug drug) {
+	public PrescriptionDTO save(Long prescriptionId, Drug drug) {
 		Optional<Prescription> prescription = repository.findById(prescriptionId);
 		if(prescription.isEmpty()) {
 			return null;
 		}
 		prescription.get().getDrugs().add(drug);
-		return repository.save(prescription.get());
+		return prescriptionMapper.apply(repository.save(prescription.get()));
 	}
 
 	@Override @Transactional
@@ -82,6 +87,7 @@ public class DrugsInPrescriptionServiceImpl implements DrugsInPrescriptionServic
     public DrugDTO convertToDto(Drug drug) {
         return mapper.apply(drug);
     }
+    
     public Optional<DrugDTO> convertToDto(Optional<Drug> drug) {
         return drug.stream().map(mapper).findFirst();
     }
