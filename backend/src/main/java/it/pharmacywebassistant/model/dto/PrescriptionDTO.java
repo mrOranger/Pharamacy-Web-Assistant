@@ -1,5 +1,6 @@
 package it.pharmacywebassistant.model.dto;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import lombok.Getter;
@@ -18,5 +19,6 @@ public class PrescriptionDTO {
 		this.id = id;
 		this.patient = patient;
 		this.doctor = doctor;
+		this.drugs = new HashSet<>();
 	}
 }
