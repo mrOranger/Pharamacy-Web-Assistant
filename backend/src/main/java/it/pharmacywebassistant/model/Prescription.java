@@ -1,6 +1,7 @@
 package it.pharmacywebassistant.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -40,7 +41,6 @@ public class Prescription implements Serializable {
     		joinColumns = { @JoinColumn(name = "prescription_id") },
     		inverseJoinColumns = { @JoinColumn(name = "drug_id") }
     )
-    @JsonBackReference
     private Set<Drug> drugs = new HashSet<>();
 
 }

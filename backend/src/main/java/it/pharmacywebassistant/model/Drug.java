@@ -13,7 +13,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity(name = "Durg") @Table(name = "Drugs")
 @NoArgsConstructor @Getter @Setter
@@ -26,7 +26,7 @@ public final class Drug extends Product implements Serializable {
     private Boolean hasPrescription;
     
     @ManyToMany(mappedBy = "drugs")
-    @JsonManagedReference
+    @JsonIgnore
     private Set<Prescription> prescriptions = new HashSet<>();
 
     public Drug(String name, String description, Double cost, Boolean hasPrescription) {
