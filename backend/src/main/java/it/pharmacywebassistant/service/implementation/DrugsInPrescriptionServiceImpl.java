@@ -59,6 +59,28 @@ public class DrugsInPrescriptionServiceImpl implements DrugsInPrescriptionServic
 		prescription.get().getDrugs().add(drug);
 		return prescriptionMapper.apply(repository.save(prescription.get()));
 	}
+	
+
+	@Override @Transactional
+	public PrescriptionDTO update(Long prescriptionId, Long drugId, Drug drug) {
+		Optional<Prescription> prescription = repository.findById(prescriptionId);
+		if(prescription.isEmpty()) {
+			return null;
+		}
+		prescription.get().getDrugs().forEach((currDrug) -> {
+			if(currDrug.getId().equals(drug.getId())) {
+				currDrug.setCompany(drug.getCompany());
+				currDrug.setCost(drug.getCost());
+				currDrug.setDescription(drug.getDescription());
+				currDrug.setHasPrescription(drug.getHasPrescription());
+				currDrug.setId(drug.getId());
+				currDrug.setName(drug.getName());
+				currDrug.setPrescriptions(drug.getPrescriptions());
+			}
+		});
+		return prescriptionMapper.apply(repository.save(prescription.get()));
+	}
+
 
 	@Override @Transactional
 	public void deleteAllDrugs(Long prescriptionId) {
@@ -75,7 +97,7 @@ public class DrugsInPrescriptionServiceImpl implements DrugsInPrescriptionServic
 		if(prescription.isPresent()) {
 			Optional<Drug> drugToRemove = prescription.get().getDrugs()
 				.stream()
-				.filter(drug -> !drug.getId().equals(drugId))
+				.filter(drug -> drug.getId().equals(drugId))
 				.findFirst();
 			if(drugToRemove.isPresent()) {
 				prescription.get().getDrugs().remove(drugToRemove.get());
@@ -95,5 +117,4 @@ public class DrugsInPrescriptionServiceImpl implements DrugsInPrescriptionServic
     public List<DrugDTO> convertToDto(List<Drug> drugList) {
         return drugList.stream().map(mapper).toList();
     }
-
 }
